@@ -1,18 +1,18 @@
 module.exports = function (sequelize, DataTypes) {
   var Donation = sequelize.define("Donation", {
-    product_name: {
+    productName: {
       type: DataTypes.STRING
     },
-    product_quantity: {
+    productQuantity: {
       type: DataTypes.INTEGER
     },
-    product_unit: {
+    productUnit: {
       type: DataTypes.STRING
     },
-    donator_id: {
+    donatorId: {
       type: DataTypes.INTEGER
     },
-    receiver_id: {
+    receiverId: {
       type: DataTypes.INTEGER
     },
     expiration: {

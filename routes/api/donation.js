@@ -2,10 +2,10 @@ const router = require("express").Router();
 const dbController = require("../../controllers/db-controller.js");
 
 router.route("/:id")
-  .get(dbController.findUserById);
+  .get(dbController.findDonationById);
 
 router.route("/")
-  .get(dbController.findAllUsers)
-  .post(dbController.createUser);
+  .get(dbController.findAllDonations)
+  .post(dbController.createDonation);
 
 module.exports = router;

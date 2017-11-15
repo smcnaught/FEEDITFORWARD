@@ -1,24 +1,33 @@
 module.exports = function (sequelize, DataTypes) {
   var User = sequelize.define("User", {
-    name: {
+    firstName: {
       type: DataTypes.STRING
     },
-    address_street: {
-      type: DataTypes.STRING
-      },
-    address_city: {
-      type: DataTypes.STRING
-      },
-    address_state: {
+    lastName: {
       type: DataTypes.STRING
     },
-    address_zip: {
+    organization: {
+      type: DataTypes.STRING
+    },
+    addressStreet: {
+      type: DataTypes.STRING
+      },
+    addressCity: {
+      type: DataTypes.STRING
+      },
+    addressState: {
+      type: DataTypes.STRING
+    },
+    addressZip: {
       type: DataTypes.STRING
     },
     type: {
       type: DataTypes.STRING
     },
     email: {
+      type: DataTypes.STRING
+    },
+    phone: {
       type: DataTypes.STRING
     },
     password: {
