@@ -1,21 +1,28 @@
 module.exports = function (sequelize, DataTypes) {
   var User = sequelize.define("User", {
-
     name: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
-    email: {type: DataTypes.STRING, allowNull: false},
-    password: {type: DataTypes.STRING, allowNull: false},
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    address_street: {
+      type: DataTypes.STRING
+      },
+    address_city: {
+      type: DataTypes.STRING
+      },
+    address_state: {
+      type: DataTypes.STRING
     },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    address_zip: {
+      type: DataTypes.STRING
+    },
+    type: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
+    },
+    password: {
+      type: DataTypes.STRING
     }
   }, {
     indexes: [
