@@ -25,7 +25,7 @@ module.exports = {
     db.User
       .findAll({
         order: [
-          ['name', 'DESC']
+          ['organization', 'ASC']
         ]
       })
       .then(users => res.json(users))
@@ -54,7 +54,7 @@ module.exports = {
     db.Donation
       .findAll({
         order: [
-          ['name', 'DESC']
+          ['productName', 'ASC']
         ]
       })
       .then(donations => res.json(donations))
