@@ -1,7 +1,7 @@
 {
   "name": "feed-it-forward",
   "version": "1.0.0",
-  "description": "",
+  "description": "FEEDITFORWARD was built to help restaurant's, grocery stores and bakeries connect with shelters to make sure leftover food never goes to waste. Our site will enable restaurants and grocery stores to become donators and shelters to become receivers. Every day, donating participants can log in to the site and offer up their leftover foods. Then receiving participants can log in and see all the food available to pick up in their area.  We will also provide the option for any business or individual to donate to our cause to make sure no one goes hungry. The donations will cover our hard costs (which should be minimal) and then go to shelters, women’s centers, the Ronald McDonald House and others in need.  We hope that our app will connect communities by getting food that would have otherwise gone to waste, to those who need it the most.",
   "main": "server.js",
   "scripts": {
     "server": "node server.js",
@@ -30,5 +30,14 @@
     "react-router-dom": "^4.1.2",
     "request": "^2.83.0",
     "sequelize": "^4.22.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smcnaught/FEEDITFORWARD.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/smcnaught/FEEDITFORWARD/issues"
+  },
+  "homepage": "https://github.com/smcnaught/FEEDITFORWARD#readme"
 }

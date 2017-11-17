@@ -1,14 +1,13 @@
 var elasticsearch = require('elasticsearch');
 
-
 var maps = require('@google/maps')
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+// const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
-const googleMapsClient =
-  require('@google/maps').createClient({
-    key: GOOGLE_API_KEY
-  });
+// const googleMapsClient =
+//   require('@google/maps').createClient({
+//     key: GOOGLE_API_KEY
+//   });
 
 var client = new elasticsearch.Client(
   {
@@ -89,11 +88,11 @@ client.indices.delete({
       });
   });
 
-googleMapsClient.geocode({
-  address: '1600 Amphitheatre Parkway, Mountain View, CA'
-}, function(err, response) {
-  if (!err) {
-    console.log(JSON.stringify(response.json.results,null,2));
-    console.log("location: " + JSON.stringify(response.json.results["0"].geometry.location,null,2));
-  }
-});
+// googleMapsClient.geocode({
+//   address: '1600 Amphitheatre Parkway, Mountain View, CA'
+// }, function(err, response) {
+//   if (!err) {
+//     console.log(JSON.stringify(response.json.results,null,2));
+//     console.log("location: " + JSON.stringify(response.json.results["0"].geometry.location,null,2));
+//   }
+// });
