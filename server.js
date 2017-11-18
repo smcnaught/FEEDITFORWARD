@@ -57,7 +57,7 @@ app.use(passport.session());
 app.use(function(req, res, next) {
   res.locals.isAuthenticated = req.isAuthenticated();
   next();
-})
+});
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
@@ -81,7 +81,7 @@ passport.use(new LocalStrategy(
         });
       }
 
-    })
+    });
   }
 ));
 
