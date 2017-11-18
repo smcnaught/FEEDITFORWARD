@@ -19,9 +19,22 @@ var bcrypt = require('bcrypt');
 var db = require("./models");
 var connection = require('./config/connection.js');
 
+app.use(express.static('public'));
+
+// Routes
+//reserve food donations
+app.get("/", function(req, res) {
+  res.render("reserve");
+});
+//signup page
+app.get("/signup", function(req, res) {
+  res.render("signup");
+});
+
+
 // view engine setup
 // Set Handlebars as the default templating engine.
-app.engine("handlebars", exphbs({ defaultLayout: null }));
+app.engine("handlebars", exphbs({ defaultLayout: main }));
 app.set("view engine", "handlebars");
 
 // Configure body parser for AJAX requests
