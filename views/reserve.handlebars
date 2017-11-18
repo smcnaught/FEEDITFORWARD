@@ -1,0 +1,64 @@
+<!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">FEED IT FORWARD</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="active"><a href="#" id="navHome">Home</a></li>
+                    <li><a href="#login" id="navLogin">Login</a></li>
+                    <li><a href="#contact" id="navContact">Contact Us</a></li>
+                </ul>
+            </div>
+    </nav>
+    <!-- jumbotron -->
+    <div class="jumbotron jumbotron-fluid" id="receiveJumbotron">
+        <div class="container">
+            <h1>Welcome</h1>
+            <h2>Search for food that is available for pickup</h2>
+        </div>
+    </div>
+    <!-- search box and available food -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <!-- Search box -->
+                <h5>Search for Available Food Items</h5>
+                <div class="input-group">
+                    <br>
+                    <input name="search" type="text" id="searchInput" class="form-control">
+                    <button class="btn btn-dark btn-md" type="submit">Search</button>
+                </div>
+                <br>
+                <hr>
+                <!-- donated food available -->
+                <h5>Donation Items Available</h5>
+                <div>
+                    <input name="donation" type="text" id="donationAvailable" placeholder="donation available" class="form-control">
+                    <input name="checkbox" type="checkbox" id="checkbox">
+                    <label for="checkbox">Check to Select</label>
+                    <br>
+                    <button class="btn btn-dark btn-md" type="submit">Reserve</button>
+                </div>
+            </div>
+            <!-- empty column -->
+            <div class="col-md-2"></div>
+            <!-- food selected for pickup -->
+            <div class="col-md-4">
+                <h5>Items to Pick Up</h5>
+                <div> 
+                    <input name="pick-up" type="text" id="pick-up" placeholder="pick-up" class="form-control">
+                    <input name="checkbox" type="checkbox" id="checkbox">
+                    <label for="checkbox">Check to Remove</label>
+                    <br>
+                    <button class="btn btn-dark btn-md" type="submit">Remove</button>
+                    <button class="btn btn-dark btn-md" type="submit">Select for Pickup </button>
+
+                </div>
+            </div>
+
+   
+
+        <!-- close container -->
+        </div>
