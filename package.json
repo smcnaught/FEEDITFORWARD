@@ -6,8 +6,7 @@
   "scripts": {
     "server": "node server.js",
     "client": "node scripts/start-client.js",
-    "full-start": "concurrently \"nodemon server.js\" \"npm run client\"",
-    "start": "nodemon server.js",
+    "start": "concurrently \"nodemon server.js\" \"npm run client\"",
     "build": "node scripts/build.js",
     "seed": "node scripts/seedDB.js",
     "init-es": "node scripts/init-elasticsearch.js",
