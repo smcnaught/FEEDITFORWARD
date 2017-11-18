@@ -16,16 +16,24 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^3.5.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "@google/maps": "^0.4.5",
     "axios": "^0.16.2",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "elasticsearch": "^13.3.1",
     "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
+    "express-mysql-session": "^1.2.3",
+    "express-session": "^1.15.6",
+    "express-validator": "^4.3.0",
     "mongoose": "^4.11.7",
     "mysql2": "^1.4.2",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "react-router-dom": "^4.1.2",
     "request": "^2.83.0",
     "sequelize": "^4.22.6"
