@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const routes = require("./routes");
 const app = express();
 const expressValidator = require('express-validator');
-const PORT = process.env.PORT || 3009;
+const PORT = process.env.PORT || 3001;
 var exphbs = require("express-handlebars");
 
 // Authentication Packages
@@ -31,8 +31,8 @@ app.use(expressValidator());
 
 app.use(cookieParser());
 // Serve up react client
-// app.use(express.static("client/build"));
-// Add routes, both API and view
+app.use(express.static("client/build"));
+//Add routes, both API and view
 
 var options = {
   host: "localhost",
@@ -80,7 +80,7 @@ passport.use(new LocalStrategy(
           }
         });
       }
-      
+
     })
   }
 ));
