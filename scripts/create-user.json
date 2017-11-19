@@ -1,0 +1,12 @@
+{
+"firstName": "Jeff",
+  "lastName": "Romine",
+  "organization": "Overstock.com",
+  "addressStreet": "1434 Buttercup Dr",
+  "addressCity": "Sandy",
+  "addressState": "UT",
+  "addressZip": "84092",
+  "type": "donor",
+  "email": "jeff@example.com",
+  "phone": "(555) 555-5555"
+}

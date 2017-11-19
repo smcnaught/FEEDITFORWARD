@@ -1,0 +1,10 @@
+{
+  "productName": "roast beef",
+  "productQuantity": 10,
+  "productUnit": "lbs",
+  "donatorId": 1,
+  "receiverId": 1,
+  "expiration": "2017-11-18T15:50:46.301Z",
+  "comments": "",
+  "status": "reserved"
+}
