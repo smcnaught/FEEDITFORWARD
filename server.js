@@ -34,7 +34,7 @@ app.get("/signup", function(req, res) {
 
 // view engine setup
 // Set Handlebars as the default templating engine.
-app.engine("handlebars", exphbs({ defaultLayout: null }));
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Configure body parser for AJAX requests
