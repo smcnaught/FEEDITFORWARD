@@ -13,21 +13,36 @@ const client = new elasticsearch.Client(
     ]
   });
 
-// [
-//   {
-//     "id": 1,
-//     "productName": "roast beef",
-//     "productQuantity": 10,
-//     "productUnit": "lbs",
-//     "donatorId": 1,
-//     "receiverId": 1,
-//     "expiration": "2017-11-15T15:50:46.000Z",
-//     "comments": "",
-//     "status": "available",
-//     "createdAt": "2017-11-18T15:57:26.000Z",
-//     "updatedAt": "2017-11-18T15:57:26.000Z"
-//   }
-// ]
+const buildDonations = ([donation, ...remaining], results, cb) => {
+  if (donation) {
+    db.User.findOne({
+      where: {id: donation.donorId}
+    }).then((donor) => {
+      results.push({
+        "id": donation.id,
+        "product_name": donation.productName,
+        "product_quantity": donation.productQuantity,
+        "product_unit": donation.productUnit,
+        "donor_id": donation.donorId,
+        "receiver_id": donation.receiverId,
+        "expiration": donation.expiration,
+        "comments": donation.comments,
+        "status": donation.status,
+        "address_street": donor.addressStreet,
+        "address_city": donor.addressCity,
+        "address_state": donor.addressState,
+        "address_zip": donor.addressZip
+      });
+      buildDonations(remaining, results, cb);
+    }).catch((err) => {
+      console.log("error: " + JSON.stringify(err));
+      buildDonations(remaining, results, cb);
+    })
+  }
+  else {
+    cb(results);
+  }
+}
 
 db.Donation
   .findAll({
@@ -36,50 +51,39 @@ db.Donation
     ]
   })
   .then(donations => {
-        client.bulk({
-          body: [
-            // action description
-            { index:  { _index: INDEX, _type: 'donation', _id: 1 } },
-            // the document to index
-            {
-              name: 'mashed potatoes',
-              quantity: '20 lbs',
-              location: 'Chuck-A-Rama',
-              address: "12344 Minuteman Dr, Draper, UT 84020",
-              "location" : {
-                "lat" : 41.12,
-                "lon" : -71.34
-              }
-            },
-            // action description
-            { update: { _index: INDEX, _type: 'donation', _id: 2 } },
-            // the document to update
-            { doc: { title: 'foo' } },
-            // action description
-            { delete: { _index: INDEX, _type: 'donation', _id: 3 } },
-            // no document needed for this delete
-          ]
-        }, function (err, resp) {
-          // ...
-        });
+    buildDonations(donations, [],
+      (donationsWithDonors) => {
+        const bulkOperations = donationsWithDonors.map(
+          (donation) => {
+            return [
+              {
+                index:
+                  {
+                    _index: 'feed-it-forward-donations',
+                    _type: 'mytype',
+                    _id: donation.id
+                  }
+              },
+              donation
+            ]
+          }
+        ).reduce((a, e) => a.concat(e));
 
-    donations.map(donation => {
-      return {
-        "_id": donation.id,
-        "product_name": donation.productName,
-        "product_quantity": donation.productQuantity,
-        "product_unit": donation.product_unit,
-        "donator_id": donation.donatorId,
-        "receiver_id": donation.receiverId,
-        "expiration_date": donation.expiration_date,
-        "comments": donation.comments,
-        "status": donation.status,
-        "created_at": donation.createdAt,
-        "updated_at": donation.updatedAt
-      };
-    });
-    console.log(JSON.stringify(donations, null, 2));
-    process.exit(0);
+        client.bulk({
+            body: bulkOperations
+          },
+          function (err, resp) {
+            if (err) {
+              console.log(JSON.stringify(err, null, 2));
+              process.exit(-1);
+            }
+            else {
+              console.log(JSON.stringify(resp, null, 2));
+              process.exit(0);
+            }
+          });
+
+      });
   })
   .catch((err) => {
       console.log("ERROR: \n", JSON.stringify(err, null, 2));
