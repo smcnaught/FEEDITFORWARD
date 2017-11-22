@@ -3,7 +3,7 @@ import React from "react"
 const Signup = props =>
 <div className = "signup">
     <div className="container" id="signUp">
-        <div className="form-row" >
+        <div className="row" >
             <div className="col-md-5">
                 <div id="signupCard">
                     <h3>How Can I Help?</h3>

@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Wrapper from "./components/Wrapper";
 import Reserve from "./pages/Reserve";
 import Signup from "./pages/Signup";
-import "index.css";
+import "./index.css";
 const App = () =>
   <Router>
     <div>
