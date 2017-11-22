@@ -24,11 +24,11 @@ app.use(express.static('public'));
 // Routes
 //reserve food donations
 app.get("/reserve", function(req, res) {
-  res.render("reserve");
+    res.render("reserve");
 });
 //signup page
 app.get("/signup", function(req, res) {
-  res.render("signup");
+    res.render("signup");
 });
 
 
@@ -48,54 +48,53 @@ app.use(express.static("client/build"));
 //Add routes, both API and view
 
 var options = {
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "feed_it_forward"
+    host: "localhost",
+    user: "root",
+    password: "password",
+    database: "feed_it_forward"
 };
 
 var sessionStore = new MySQLStore(options);
 
 app.use(session({
-  secret: 'dfsafsjnjnsjf',
-  resave: false,
-  store: sessionStore,
-  saveUninitialized: false,
-  // cookie: { secure: true }
+    secret: 'dfsafsjnjnsjf',
+    resave: false,
+    store: sessionStore,
+    saveUninitialized: false,
+    // cookie: { secure: true }
 }))
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function(req, res, next) {
-  res.locals.isAuthenticated = req.isAuthenticated();
-  next();
+    res.locals.isAuthenticated = req.isAuthenticated();
+    next();
 });
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
-    console.log(username);
-    console.log(password);
+    function(username, password, done) {
+        console.log(username);
+        console.log(password);
 
-    connection.query('SELECT id, password FROM users WHERE email = ?', [username], function(err, results, fields) {
-      if (err) {done(err)};
-      if (results.length === 0) {
-        done(null, false);
-      }
-      else {
-        console.log(results[0].password.toString());
-        const hash = results[0].password.toString();
-        bcrypt.compare(password, hash, function(err, response) {
-          if (response === true) {
-            return done(null, {user_id: results[0].id});
-          } else {
-            return done(null, false);
-          }
+        connection.query('SELECT id, password FROM users WHERE email = ?', [username], function(err, results, fields) {
+            if (err) { done(err) };
+            if (results.length === 0) {
+                done(null, false);
+            } else {
+                console.log(results[0].password.toString());
+                const hash = results[0].password.toString();
+                bcrypt.compare(password, hash, function(err, response) {
+                    if (response === true) {
+                        return done(null, { user_id: results[0].id });
+                    } else {
+                        return done(null, false);
+                    }
+                });
+            }
+
         });
-      }
-
-    });
-  }
+    }
 ));
 
 app.use(routes);
@@ -105,8 +104,8 @@ app.use(routes);
 // Syncing our sequelize models and then starting our Express app
 // =============================================================
 db.sequelize.sync().then(function() {
-  app.listen(PORT, function() {
+    app.listen(PORT, function() {
 
-    console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
-  });
+        console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
+    });
 });
