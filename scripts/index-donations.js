@@ -1,18 +1,9 @@
 const db = require("../models");
 const elasticsearch = require('elasticsearch');
 const INDEX = "feed-it-forward-donations";
-
-const client = new elasticsearch.Client(
-  {
-    host: [
-      {
-        host: 'localhost',
-        auth: 'elastic:changeme',
-        protocol: 'http',
-        port: 9200
-      }
-    ]
-  });
+const config = require("../config/search.json");
+var env = process.env.NODE_ENV || 'development';
+const client = new elasticsearch.Client(config[env]);
 
 const deleteIndex = (cb) => {
   client.indices.delete(
