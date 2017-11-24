@@ -1,0 +1,25 @@
+{
+  "development": {
+    "host": [
+      {
+        "host": "localhost",
+        "auth": "elastic:changeme",
+        "protocol": "http",
+        "port": 9200
+      }
+    ]
+  },
+  "test": {
+    "host": [
+      {
+        "host": "localhost",
+        "auth": "elastic:changeme",
+        "protocol": "http",
+        "port": 9200
+      }
+    ]
+  },
+  "production": {
+    "use_env_variable": "TO BE DETERMINED"
+  }
+}
