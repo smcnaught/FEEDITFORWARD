@@ -4,19 +4,52 @@ import {List} from "../components/List/List";
 import {ListItem} from "../components/List/ListItem";
 import {FacetGroup} from "../components/Facets/FacetGroup";
 
-var tagFacets = [
+
+var colorFacetsTree = [
   {
-    "label": "vegetable",
-    "count": 45
-  },
-  {
-    "label": "protein",
-    "count": 12,
+    "key": "Any Color",
+    "path": "/catalog/",
     "isSelected": true
   },
   {
-    "label": "dessert",
-    "count": 8
+    "key": "Puce",
+    "path": "/catalog/",
+    "isSelected": false
+  }
+];
+
+var categoryFacets = [
+  {
+    "key": "Grabs Bars",
+    "path": "/catalog/healthcare-equipment-bathing-grab-bars",
+    "doc_count": 45
+  },
+  {
+    "key": "Tub Accessories",
+    "path": "/catalog/healthcare-equipment-bathing-tub-accessories",
+    "doc_count": 12
+  },
+  {
+    "key": "Bathing Lifts",
+    "path": "/catalog/healthcare-equipment-bathing-bathing-lifts",
+    "doc_count": 8
+  }
+];
+
+var categoryFacetsTree = [
+  {
+    "key": "Any Category",
+    "path": "/catalog/",
+    "isSelected": false
+  },{
+    "key": "Healthcare Equipment",
+    "path": "/catalog/healthcare-equipment",
+    "isSelected": false
+  },
+  {
+    "key": "Bathing",
+    "path": "/catalog/healthcare-equipment-bathing",
+    "isSelected": true
   }
 ];
 
@@ -53,9 +86,9 @@ class Donations extends Component {
       </div>
       <div className="row">
         <div className="col-md-2">
-          <div>
-            <FacetGroup title="Tags" facets={this.state.tags} type="multi-select"/>
-          </div>
+          <FacetGroup title="Tags" facets={this.state.tags} type="multi-select"/>
+          <FacetGroup title="Color" tree={colorFacetsTree}/>
+          <FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>
         </div>
         <div className="col-md-10">
           <List>

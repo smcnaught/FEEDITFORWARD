@@ -5,27 +5,27 @@ export const FacetGroupTree = props => {
   var facetNodes = [];
   var overallBuild;
 
-  if( this.props.facets ) {
-    this.props.facets.forEach(function(facet) {
-      facetNodes.push(<li><FacetLink label={facet.label} count={facet.count} path={facet.path} /></li>);
+  if (props.facets) {
+    props.facets.forEach(function (facet) {
+      facetNodes.push(<li key={facet.key}><FacetLink label={facet.key} count={facet.doc_count} path={facet.path}/></li>);
     });
   }
 
   overallBuild = facetNodes;
 
-  if( this.props.tree ) {
-    this.props.tree.reverse();
-    this.props.tree.forEach(function(treeNode) {
-      if( treeNode.isSelected ) {
-        var cn = <span className="x-selected">{treeNode.label}</span>;
+  if (props.tree) {
+    props.tree.reverse();
+    props.tree.forEach(function (treeNode) {
+      if (treeNode.isSelected) {
+        var cn = <span className="x-selected">{treeNode.key}</span>;
       } else {
-        var cn = <a href={treeNode.path} className="x-undo">{treeNode.label}</a>;
+        var cn = <a href={treeNode.path} className="x-undo">{treeNode.key}</a>;
       }
       overallBuild = <li>{cn}
         <ul>
-        {overallBuild}
-      </ul>
-        </li>;
+          {overallBuild}
+        </ul>
+      </li>;
     });
   }
 

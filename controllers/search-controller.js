@@ -41,6 +41,5 @@ module.exports = {
         pages: Math.ceil(res.hits.total / perPage)
       });
     });
-
   }
 }
