@@ -36,6 +36,7 @@ module.exports = {
 
       response.json({
         results: res.hits.hits,
+        tags: res.aggregations.tags.buckets,
         page: pageNum,
         pages: Math.ceil(res.hits.total / perPage)
       });

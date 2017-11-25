@@ -14,18 +14,6 @@ const googleMapsClient =
     key: GOOGLE_API_KEY
   });
 
-const client = new elasticsearch.Client(
-  {
-    host: [
-      {
-        host: 'localhost',
-        auth: 'elastic:changeme',
-        protocol: 'http',
-        port: 9200
-      }
-    ]
-  });
-
 const deleteIndex = (cb) => {
   client.indices.delete(
     {index: INDEX})
@@ -57,6 +45,12 @@ const createIndex = (cb) => {
           properties: {
             location: {
               type: "geo_point"
+            },
+            tags: {
+              type: "keyword"
+            },
+            product_name: {
+              type: "text"
             }
           }
         }
@@ -117,6 +111,7 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
             "address_city": donor.addressCity,
             "address_state": donor.addressState,
             "address_zip": donor.addressZip,
+            "tags": ["fruit","pie"],
             "location": {
               "lat": location.lat,
               "lon": location.lng

@@ -1,0 +1,75 @@
+import React, {Component} from "react";
+import API from "../utils/API";
+import {List} from "../components/List/List";
+import {ListItem} from "../components/List/ListItem";
+import {FacetGroup} from "../components/Facets/FacetGroup";
+
+var tagFacets = [
+  {
+    "label": "vegetable",
+    "count": 45
+  },
+  {
+    "label": "protein",
+    "count": 12,
+    "isSelected": true
+  },
+  {
+    "label": "dessert",
+    "count": 8
+  }
+];
+
+class Donations extends Component {
+
+  state = {
+    donations: [],
+    tags: []
+  };
+
+  componentDidMount() {
+    API.searchAllDonations()
+      .then(res => {
+          this.setState(
+            {
+              donations: res.data.results,
+              tags: res.data.tags
+            });
+        }
+      )
+      .catch(err => console.log(err));
+  };
+
+  handleInputChange = event => {
+  };
+
+  render = () =>
+    <div className="container-fluid">
+      <div className="row">
+        <div className="input-group">
+          <input name="search" type="text" id="searchInput" className="form-control"/>
+          <button className="btn btn-dark btn-md" type="submit">Search</button>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-2">
+          <div>
+            <FacetGroup title="Tags" facets={this.state.tags} type="multi-select"/>
+          </div>
+        </div>
+        <div className="col-md-10">
+          <List>
+            {this.state.donations.map(donation => (
+              <ListItem key={donation._id}>
+            <pre>
+              {JSON.stringify(donation, null, 2)}
+            </pre>
+              </ListItem>
+            ))}
+          </List>
+        </div>
+      </div>
+    </div>
+}
+
+export default Donations;

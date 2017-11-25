@@ -37,8 +37,12 @@ export default {
               "distance_type": "arc"
             }
           }
-        ]
-
+        ],
+        "aggs" : {
+          "tags": {
+            "terms": {"field": "tags"}
+          }
+        }
       });
   }
 };

@@ -1,0 +1,19 @@
+body { font-family: Open Sans, Helvetica Neue, Arial; font-size: 14px; font-weight: 400 }
+
+#search-facets { background: #eee; width: 250px;}
+#search-facets h1 { font-size: 16px; color: #777; margin: 10px 10px 5px 10px;}
+
+.facet-group { overflow: auto;}
+.facet-group + .facet-group { border-top: 1px solid #ddd }
+.facet-group ul { list-style: none; margin: 5px 10px 10px 10px; padding: 0}
+.facet-group ul li + li { margin-top: 5px; }
+
+.facet-group .x-undo:before { content: "⤺ "; font-size: 12px;}
+.facet-group .x-selected { font-weight: bold; }
+
+
+
+.facet-node{ color: #333;}
+.facet-count{ color: #888; font-size: .9em;}
+
+a { text-decoration: none }
