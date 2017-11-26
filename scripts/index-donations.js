@@ -76,6 +76,7 @@ const createIndex = (cb) => {
 
 const buildDonations = ([donation, ...remaining], results, cb) => {
   if (donation) {
+    console.log("donation:\n" + JSON.stringify(donation,null,2));
     db.User.findOne({
       where: {id: donation.donorId}
     }).then((donor) => {
@@ -96,6 +97,7 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
           console.log(JSON.stringify(response.json.results,null,2));
           console.log("location: " + JSON.stringify(response.json.results["0"].geometry.location,null,2));
           let location = response.json.results["0"].geometry.location;
+          let tags = donation.Tags.map(tag => tag.name);
           results.push({
             "id": donation.id,
             "product_name": donation.productName,
@@ -111,7 +113,7 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
             "address_state": donor.addressState,
             "address_zip": donor.addressZip,
             "organization": donor.organization,
-            "tags": ["fruit","pie"],
+            "tags": tags,
             "location": {
               "lat": location.lat,
               "lon": location.lng
@@ -136,6 +138,9 @@ const indexDonations = (cb) => {
     .findAll({
       order: [
         ['productName', 'ASC']
+      ],
+      include: [
+        db.Tag
       ]
     })
     .then(donations => {
