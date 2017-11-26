@@ -1,11 +1,10 @@
 const db = require("../models");
 const elasticsearch = require('elasticsearch');
-const maps = require('@google/maps');
 
 const INDEX = "feed-it-forward-donations";
 const config = require("../config/search.json");
 var env = process.env.NODE_ENV || 'development';
-const client = new elasticsearch.Client(config[env]);
+const esClient = new elasticsearch.Client(config[env]);
 
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
@@ -15,7 +14,7 @@ const googleMapsClient =
   });
 
 const deleteIndex = (cb) => {
-  client.indices.delete(
+  esClient.indices.delete(
     {index: INDEX})
     .then(response => {
       console.log(
@@ -35,7 +34,7 @@ const deleteIndex = (cb) => {
 };
 
 const createIndex = (cb) => {
-  client.indices.create({
+  esClient.indices.create({
     index: INDEX,
     body: {
       "number_of_shards": 1,
@@ -51,6 +50,9 @@ const createIndex = (cb) => {
             },
             product_name: {
               type: "text"
+            },
+            expiration: {
+              type: "date"
             }
           }
         }
@@ -162,7 +164,7 @@ const indexDonations = (cb) => {
             }
           ).reduce((a, e) => a.concat(e),[]);
           if (bulkOperations.length > 0) {
-            client.bulk({
+            esClient.bulk({
                 body: bulkOperations
               },
               cb);
