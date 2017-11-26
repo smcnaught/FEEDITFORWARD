@@ -33,9 +33,13 @@ module.exports = {
         // handle error
         throw err;
       }
-
+      const results = res.hits.hits.map(result =>
+        Object.assign(
+          {},
+          result._source,
+          {distance: result.sort[0]}));
       response.json({
-        results: res.hits.hits,
+        results: results,
         tags: res.aggregations.tags.buckets,
         page: pageNum,
         pages: Math.ceil(res.hits.total / perPage)

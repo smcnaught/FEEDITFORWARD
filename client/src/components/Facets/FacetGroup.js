@@ -8,7 +8,7 @@ export const FacetGroup = props => {
   var facetListing;
   switch (props.type) {
     case "multi-select":
-      facetListing = <FacetGroupMultiSelect facets={props.facets}/>;
+      facetListing = <FacetGroupMultiSelect facets={props.facets} handleFacetCheck={props.handleFacetCheck}/>;
       break;
     default:
       facetListing = <FacetGroupTree facets={props.facets} tree={props.tree}/>;

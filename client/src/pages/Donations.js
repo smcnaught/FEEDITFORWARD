@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import API from "../utils/API";
-import {List} from "../components/List/List";
-import {ListItem} from "../components/List/ListItem";
 import {FacetGroup} from "../components/Facets/FacetGroup";
+import {DonationResult} from "../components/Donation/DonationResult";
+import {List,ListItem} from "../components/List";
 
 
 var colorFacetsTree = [
@@ -57,16 +57,25 @@ class Donations extends Component {
 
   state = {
     donations: [],
-    tags: []
+    tags: [],
+    tagFacets: []
   };
 
   componentDidMount() {
     API.searchAllDonations()
       .then(res => {
-          this.setState(
+        const currentFacetMap = this.state.tagFacets.reduce((a,e) => a[e.key]=e,{});
+        const tags = res.data.tags;
+        const newTagFacets = tags.map(tagFacet => {
+          const currentFacet = currentFacetMap[tagFacet.key];
+          return currentFacet || Object.assign(tagFacet,{isSelected: false});
+        });
+
+        this.setState(
             {
               donations: res.data.results,
-              tags: res.data.tags
+              tags: res.data.tags,
+              tagFacets: newTagFacets
             });
         }
       )
@@ -74,6 +83,43 @@ class Donations extends Component {
   };
 
   handleInputChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleFacetCheck = event => {
+    const {id} = event.target;
+    console.log("handleFacetCheck: " + id);
+    const newTagFacets = this.state.tagFacets.map(tagFacet => {
+      if (tagFacet.key === id) {
+        return Object.assign(tagFacet,{isSelected: !tagFacet.isSelected});
+      }
+      else {
+        return tagFacet;
+      }
+    });
+    const activeTags = newTagFacets.reduce((a,e) => {
+      if (e.isSelected) {
+        a.push(e.key);
+      }
+      return a;
+    },[]);
+    const query={
+        "terms": {"tags": activeTags}
+    };
+    API.searchDonations(query)
+      .then(res => {
+          this.setState(
+            {
+              donations: res.data.results,
+              tags: res.data.tags,
+              tagFacets: newTagFacets
+            });
+        }
+      )
+      .catch(err => console.log(err));
   };
 
   render = () =>
@@ -86,19 +132,19 @@ class Donations extends Component {
       </div>
       <div className="row">
         <div className="col-md-2">
-          <FacetGroup title="Tags" facets={this.state.tags} type="multi-select"/>
-          <FacetGroup title="Color" tree={colorFacetsTree}/>
-          <FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>
+          <FacetGroup title="Tags" facets={this.state.tagFacets} handleFacetCheck={this.handleFacetCheck} type="multi-select"/>
+          {/*<FacetGroup title="Color" tree={colorFacetsTree}/>*/}
+          {/*<FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>*/}
         </div>
         <div className="col-md-10">
           <List>
-            {this.state.donations.map(donation => (
-              <ListItem key={donation._id}>
-            <pre>
-              {JSON.stringify(donation, null, 2)}
-            </pre>
-              </ListItem>
-            ))}
+            {
+              this.state.donations.map(donation =>
+                <ListItem>
+                  <DonationResult donation={donation}/>
+                </ListItem>
+              )
+            }
           </List>
         </div>
       </div>
