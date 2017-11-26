@@ -1,5 +1,5 @@
-module.exports = function (sequelize, DataTypes) {
-  var Donation = sequelize.define("Donation", {
+module.exports = (sequelize, DataTypes) => {
+  const Donation = sequelize.define("Donation", {
     productName: {
       type: DataTypes.STRING
     },
@@ -35,5 +35,27 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
   });
+  Donation.associate = function(models) {
+    Donation.belongsToMany(models.Tag, {
+      through: {
+        model: models.ItemTag,
+        unique: false,
+        scope: {
+          taggable: 'donation'
+        }
+      },
+      foreignKey: 'taggable_id',
+      constraints: false
+    });
+    models.Tag.belongsToMany(Donation, {
+      through: {
+        model: models.ItemTag,
+        unique: false
+      },
+      foreignKey: 'tag_id',
+      constraints: false
+    });
+  };
+
   return Donation;
 };

@@ -93,7 +93,6 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
           console.log(JSON.stringify(response.json.results,null,2));
         }
         else {
-
           console.log(JSON.stringify(response.json.results,null,2));
           console.log("location: " + JSON.stringify(response.json.results["0"].geometry.location,null,2));
           let location = response.json.results["0"].geometry.location;
@@ -111,6 +110,7 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
             "address_city": donor.addressCity,
             "address_state": donor.addressState,
             "address_zip": donor.addressZip,
+            "organization": donor.organization,
             "tags": ["fruit","pie"],
             "location": {
               "lat": location.lat,

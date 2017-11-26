@@ -1,5 +1,29 @@
 const db = require("../models");
 
+const findOrCreateTags = (tagNames, results, callback) => {
+  if (tagNames && tagNames.length > 0) {
+    let tagName = tagNames[0];
+    let remainingTagNames = tagNames.slice(1);
+    db.Tag.findOrCreate(
+      {
+        where: {
+          name: tagName
+        },
+        defaults: {
+          name: tagName
+        }
+      })
+      .then(([tag,created]) => {
+        results.push(tag);
+        findOrCreateTags(remainingTagNames, results,callback);
+      })
+      .catch(err => console.log(JSON.stringify(err, null, 2)));
+  }
+  else {
+    callback(results);
+  }
+};
+
 // Defining methods for the booksController
 module.exports = {
   createUser: (req, res) => {
@@ -32,10 +56,18 @@ module.exports = {
       .catch(err => res.status(500).json(err));
   },
   createDonation: (req, res) => {
-    db.Donation
-      .create(req.body)
-      .then(donation => res.json(donation))
-      .catch(err => res.status(500).json(err));
+    const tagNames = req.body.tags;
+
+    findOrCreateTags(tagNames, [], tags => {
+      db.Donation
+        .create(req.body)
+        .then(donation => {
+          donation.setTags(tags);
+          donation.save().then(
+            donation => res.json(donation));
+        })
+        .catch(err => res.status(500).json(err));
+    });
   },
   findDonationById: function (req, res) {
     db.Donation
@@ -55,6 +87,9 @@ module.exports = {
       .findAll({
         order: [
           ['productName', 'ASC']
+        ],
+        include: [
+          db.Tag
         ]
       })
       .then(donations => res.json(donations))
