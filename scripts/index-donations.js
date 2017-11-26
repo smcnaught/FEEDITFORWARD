@@ -1,25 +1,17 @@
 const db = require("../models");
 const elasticsearch = require('elasticsearch');
-const maps = require('@google/maps')
+const maps = require('@google/maps');
 
 const INDEX = "feed-it-forward-donations";
+const config = require("../config/search.json");
+var env = process.env.NODE_ENV || 'development';
+const client = new elasticsearch.Client(config[env]);
+
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 const googleMapsClient =
   require('@google/maps').createClient({
     key: GOOGLE_API_KEY
-  });
-
-const client = new elasticsearch.Client(
-  {
-    host: [
-      {
-        host: 'localhost',
-        auth: 'elastic:changeme',
-        protocol: 'http',
-        port: 9200
-      }
-    ]
   });
 
 const deleteIndex = (cb) => {
@@ -40,7 +32,7 @@ const deleteIndex = (cb) => {
         cb(error,null);
       }
     });
-}
+};
 
 const createIndex = (cb) => {
   client.indices.create({
@@ -53,6 +45,12 @@ const createIndex = (cb) => {
           properties: {
             location: {
               type: "geo_point"
+            },
+            tags: {
+              type: "keyword"
+            },
+            product_name: {
+              type: "text"
             }
           }
         }
@@ -74,10 +72,11 @@ const createIndex = (cb) => {
         cb(error,null);
       }
     });
-}
+};
 
 const buildDonations = ([donation, ...remaining], results, cb) => {
   if (donation) {
+    console.log("donation:\n" + JSON.stringify(donation,null,2));
     db.User.findOne({
       where: {id: donation.donorId}
     }).then((donor) => {
@@ -95,10 +94,10 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
           console.log(JSON.stringify(response.json.results,null,2));
         }
         else {
-
           console.log(JSON.stringify(response.json.results,null,2));
           console.log("location: " + JSON.stringify(response.json.results["0"].geometry.location,null,2));
           let location = response.json.results["0"].geometry.location;
+          let tags = donation.Tags.map(tag => tag.name);
           results.push({
             "id": donation.id,
             "product_name": donation.productName,
@@ -113,6 +112,8 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
             "address_city": donor.addressCity,
             "address_state": donor.addressState,
             "address_zip": donor.addressZip,
+            "organization": donor.organization,
+            "tags": tags,
             "location": {
               "lat": location.lat,
               "lon": location.lng
@@ -125,7 +126,7 @@ const buildDonations = ([donation, ...remaining], results, cb) => {
     }).catch((err) => {
       console.log("error: " + JSON.stringify(err));
       buildDonations(remaining, results, cb);
-    })
+    });
   }
   else {
     cb(results);
@@ -137,6 +138,9 @@ const indexDonations = (cb) => {
     .findAll({
       order: [
         ['productName', 'ASC']
+      ],
+      include: [
+        db.Tag
       ]
     })
     .then(donations => {
@@ -154,7 +158,7 @@ const indexDonations = (cb) => {
                     }
                 },
                 donation
-              ]
+              ];
             }
           ).reduce((a, e) => a.concat(e),[]);
           if (bulkOperations.length > 0) {
