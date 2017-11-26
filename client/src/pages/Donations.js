@@ -106,6 +106,8 @@ class Donations extends Component {
       }
       return a;
     },[]);
+    if (activeTags.length > 0) {
+
     const query={
         "terms": {"tags": activeTags}
     };
@@ -120,6 +122,10 @@ class Donations extends Component {
         }
       )
       .catch(err => console.log(err));
+    }
+    else {
+      this.componentDidMount();
+    }
   };
 
   render = () =>
