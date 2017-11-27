@@ -1,0 +1,170 @@
+There are two kinds of entities so far in our app, donations and users.  The user REST API is under localhost:3001/api/users.
+
+Creating a user.  It is possible to create a user by posting to http://localhost:3001/api/users. For example:
+
+#+BEGIN_SRC shell-script
+curl -X POST \
+  http://localhost:3001/api/users \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -d '
+{
+"firstName": "Joe",
+  "lastName": "Brewmaster",
+  "organization": "Red Rock Brewery",
+  "addressStreet": "6227 State St",
+  "addressCity": "Murray",
+  "addressState": "UT",
+  "addressZip": "84107",
+  "type": "donor",
+  "email": "joe@redrock.com",
+  "phone": "(555) 555-5555"
+}
+
+'
+#+END_SRC
+
+You can get listing of users by doing a GET on
+http://localhost:3001/api/users.  This is as easy as opening this link
+in a browser or using curl:
+
+#+BEGIN_SRC shell-script
+curl -X GET \
+  http://localhost:3001/api/users \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json'
+#+END_SRC
+
+
+Donations work pretty much the same way but using /api/users.  Here is how you would add a donation using curl:
+
+#+BEGIN_SRC shell-script
+curl -X POST \
+  http://localhost:3001/api/donations \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+   -d '{
+  "productName": "fried chicken",
+  "productQuantity": 10,
+  "productUnit": "lbs",
+  "donorId": 1,
+  "expiration": "2017-11-15T15:50:46.301Z",
+  "comments": "",
+  "status": "available",
+  "tags":["protein","chicken"]
+}
+'
+#+END_SRC
+
+Make sure that donorId refers to the id of one of the users.  There is
+also a receiverId which you can point at a user with type "recipient".
+If there is a recipient the donation status should probably be
+"reserved" or "recieved".  These things don't actually mean anything
+yet, except for the donorId since that is used to look up the location,
+ but we should try to be somewhat consistent.
+
+
+In React code you should make these calls through the API object in FEEDITFORWARD/client/utils/API.js.  Here is an example:
+
+#+BEGIN_SRC javascript
+import React, { Component } from "react";
+import API from "../utils/API";
+import {List} from "../components/List/List";
+import {ListItem} from "../components/List/ListItem";
+
+class Landing extends Component {
+  state = {
+    donations: []
+  };
+
+  componentDidMount() {
+    API.getDonations()
+      .then(res => {
+          this.setState(
+            {
+              donations: res.data
+            });
+        }
+      )
+      .catch(err => console.log(err));
+  };
+
+  handleInputChange = event => {
+  };
+
+  render = () =>
+    <List>
+      {this.state.donations.map(donation => (
+        <ListItem key={donation._id}>
+            <pre>
+              {JSON.stringify(donation,null,2)}
+            </pre>
+        </ListItem>
+      ))}
+    </List>
+}
+
+export default Landing;
+
+#+END_SRC
+
+Unfortunately, only a couple of calls are current available through
+API.js.  I will be working next on adding the rest of the calls that
+are implemented in the back end.
+
+API.js isn't very complicated. Here is the current version:
+
+#+BEGIN_SRC javascript
+const searchDonations = query  => {
+  const queryComponent = {
+    "bool": Object.assign({
+        "filter": {
+          "geo_distance": {
+            "distance": "1000mi",
+            "location": {
+              "lat": 40.5680304,
+              "lon": -111.8500344
+            }
+          }
+        }
+      },
+      {"must": query})
+  };
+  return axios.post('/api/search/feed-it-forward-donations',
+    {
+      "query": queryComponent,
+      "sort": [
+        {
+          "_geo_distance": {
+            "location" : {
+              "lat": 40.5680304,
+              "lon": -111.8500344
+            },
+            "order":         "asc",
+            "unit":          "mi",
+            "distance_type": "arc"
+          }
+        }
+      ],
+      "aggs" : {
+        "tags": {
+          "terms": {"field": "tags"}
+        }
+      }
+    });
+};
+
+export default {
+  getDonations() {
+    return axios.get('/api/donations');
+  },
+  searchAllDonations() {
+    return searchDonations(
+      {
+        "match_all": {}
+      }
+    );
+  },
+  searchDonations: searchDonations
+};
+#+END_SRC
