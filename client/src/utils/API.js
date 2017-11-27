@@ -50,5 +50,15 @@ export default {
       }
     );
   },
-  searchDonations: searchDonations
+  searchDonations: searchDonations,
+  createDonation(donation) {
+    return axios.post(
+      '/api/donations',
+      donation);
+  },
+  createUser(user) {
+    return axios.post(
+      '/api/users',
+      user);
+  }
 };
