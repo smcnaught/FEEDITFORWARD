@@ -1,9 +1,7 @@
 const db = require("../models");
 
-const findOrCreateTags = (tagNames, results, callback) => {
-  if (tagNames && tagNames.length > 0) {
-    let tagName = tagNames[0];
-    let remainingTagNames = tagNames.slice(1);
+const findOrCreateTags = ([tagName, ...remainingTagNames], results, callback) => {
+  if (tagName) {
     db.Tag.findOrCreate(
       {
         where: {
@@ -13,9 +11,9 @@ const findOrCreateTags = (tagNames, results, callback) => {
           name: tagName
         }
       })
-      .then(([tag,created]) => {
+      .then(([tag, created]) => {
         results.push(tag);
-        findOrCreateTags(remainingTagNames, results,callback);
+        findOrCreateTags(remainingTagNames, results, callback);
       })
       .catch(err => console.log(JSON.stringify(err, null, 2)));
   }
@@ -23,6 +21,21 @@ const findOrCreateTags = (tagNames, results, callback) => {
     callback(results);
   }
 };
+
+const dbDonationToAPI = donation => {
+
+  const tags = donation.Tags.map(tag => tag.name);
+  const result = Object.assign(
+    {
+      tags: tags,
+    },
+    donation.dataValues
+  );
+  delete result.Tags;
+  return result;
+};
+
+const dbDonationsToAPI = donations => donations.map(dbDonationToAPI);
 
 // Defining methods for the booksController
 module.exports = {
@@ -62,19 +75,38 @@ module.exports = {
       db.Donation
         .create(req.body)
         .then(donation => {
-          donation.setTags(tags);
+          if (tags && tags.length > 0) {
+            donation.setTags(tags);
+          }
           donation.save().then(
-            donation => res.json(donation));
+            donation => {
+              // For some reason the tags are not available at this point.
+              // It may have something to do with the need for an include query to retrieve
+              // them.
+              donation.reload({include: [db.Tag]}).then(
+                reloadedDonation => {
+                  const result = Object.assign(
+                    {tags: tagNames},
+                    reloadedDonation.dataValues);
+                  res.json(result);
+                });
+            }
+          );
         })
         .catch(err => res.status(500).json(err));
     });
   },
   findDonationById: function (req, res) {
     db.Donation
-      .findById(req.params.id)
+      .findById(req.params.id,
+        {
+          include: [
+            db.Tag
+          ]
+        })
       .then(donation => {
         if (donation) {
-          res.json(donation);
+          res.json(dbDonationToAPI(donation));
         }
         else {
           res.status(404).send(`Donation with id=${req.params.id} not found.`);
@@ -92,7 +124,7 @@ module.exports = {
           db.Tag
         ]
       })
-      .then(donations => res.json(donations))
+      .then(donations => res.json(dbDonationsToAPI(donations)))
       .catch(err => res.status(500).json(err));
   }
 };
