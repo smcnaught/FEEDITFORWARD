@@ -44,22 +44,22 @@ class Donate extends Component {
     <div className="container">
       <div className="row">
         <div className="col-md-5">
-          <label for="productName">Product Name</label>
+          <label htmlFor="productName">Product Name</label>
           <input name="productName" type="text" id="productName" onChange={this.handleInputChange} className="form-control"/>
-          <label for="productQuantity">Product Quantity</label>
+          <label htmlFor="productQuantity">Product Quantity</label>
           <input name="productQuantity" type="number" id="productQuantity" onChange={this.handleInputChange} className="form-control"/>
-          <div class="form-group">
-            <label for="productUnit">Units</label>
-            <select class="form-control" id="sel1">
+          <div className="form-group">
+            <label htmlFor="productUnit">Units</label>
+            <select className="form-control" id="sel1">
               <option></option>
               <option>lb</option>
               <option>gal</option>
               <option>oz</option>
             </select>
           </div>
-          <label for="expiration">Expiration</label>
+          <label htmlFor="expiration">Expiration</label>
           <input name="expiration" type="datetime-local" id="expiration" onChange={this.handleInputChange} className="form-control"/>
-          <label for="tags">Tags</label>
+          <label htmlFor="tags">Tags</label>
           <input name="tags" type="text" id="expiration" onChange={this.handleInputChange} className="form-control"/>
         </div>
       </div>
