@@ -1,0 +1,123 @@
+#+STARTUP: showeverything
+
+* Links
+
+
+[[https://www.elastic.co/webinars/getting-started-elasticsearch][Elastic Search: Getting Started]]
+
+
+* Java Installation
+
+You may already have java installed.  If not, however, I would
+recommend installing the Java SDK rather than just the generic java
+installation.
+
+
+Start by downloading the appropriate Java 8 (9 is available but might not be compatible with elastic search) JDK from:
+
+[[http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html][Java SE Development Kit 8 Downloads]]
+
+Completing the installation process should be fairly straightforward.
+
+* Elasticsearch Install
+
+** Download
+
+Start by clicking the Download button at [[https://www.elastic.co/products/elasticsearch]].
+
+
+*** Windows
+
+ Select [[https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.0.0.msi][MSI]]
+
+*** Mac
+
+ Select [[https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.0.0.tar.gz][TAR]]
+
+
+** Complete Installation
+
+*** Windows
+
+Run the MSI file.
+
+*** Mac
+
+Deside where you want elastic search to live and copy the file there.
+#+BEGIN_SRC shell-script
+mkdir ~/es
+#+END_SRC
+
+Move the downloaded tar.gz file to the directory and expand it
+
+#+BEGIN_SRC shell-script
+mv ~/Downloads/elasticsearch-5.6.4.tar.gz ~/es
+
+cd ~/es
+
+tar -xzf elasticsearch-5.6.4.tar.gz
+
+#+END_SRC
+
+
+This will create the elasticsearch directory.  In this case
+elasticsearch-5.6.4.  Change to that directory
+
+#+BEGIN_SRC shell-script
+cd elasticsearch-5.6.4
+#+END_SRC
+
+
+Start Elasticsearch by run the elasticsearch command in the bin directory.
+
+#+BEGIN_SRC shell-script
+bin/elasticsearch
+#+END_SRC
+
+This starts the Elasticsearch server at [[http://localhost:9200/]].
+
+
+* Kibana Install
+
+Kibana provides a nice user interface for interacting with Elasticsearch.
+
+On [[https://www.elastic.co/downloads/kibana]] click the Download Button and select the correct version.
+
+
+
+*** Windows
+
+ Select [[https://artifacts.elastic.co/downloads/kibana/kibana-6.0.0-windows-x86_64.zip][WINDOWS]]
+
+*** Mac
+
+ Select [[https://artifacts.elastic.co/downloads/kibana/kibana-6.0.0-darwin-x86_64.tar.gz][MAC]]
+
+
+Once you have this downloaded mv it to your base directory and unpack:
+
+#+BEGIN_SRC shell-script
+mv ~/Downloads/kibana-6.0.0-darwin-x86_64.tar.gz ~/es
+tar -xzf kibana-6.0.0-darwin-x86_64.tar.gz
+cd kibana-6.0.0
+#+END_SRC
+
+
+Modify config/kibana.yml
+
+Set elasticsearch.yml to point at your Elasticsearch instance. It should look like
+
+#+BEGIN_SRC yaml
+  # The URL of the Elasticsearch instance to use for all your queries.
+  elasticsearch.url: "http://localhost:9200"
+#+END_SRC
+
+Start kibana like you did Elasticsearch
+
+#+BEGIN_SRC shell-script
+bin/kibana
+#+END_SRC
+
+In your browser go to:
+
+[[http://localhost:5601]]
