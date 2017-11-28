@@ -8,7 +8,7 @@ const Signup = props =>
                 <div id="signupCard">
                     <h3>How Can I Help?</h3>
                     <hr />
-                    <img className="card-img-top"
+                    <img id="signupPic" className="card-img-top"
                     src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=1868&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"
                     alt="Food" />
                     <div className="card-body">
@@ -30,43 +30,34 @@ const Signup = props =>
                     <hr />
                     <div className="card-body">
                         <label for="organization">Organization Name</label>
-
-                        <input className="signupInput" name="name" type="text" />
+                        <input className="signupInput" id="orgName" type="text"/>
 
                         <label for="contact">Contact Name</label>
-
-                        <input className="signupInput" name="name" type="text" />
+                        <input className="signupInput" id="name" type="text"/>
 
                         <label for="phone">Phone Number</label>
-
-                        <input className="signupInput" name="phonenumber" type="text" />
+                        <input className="signupInput" id="phonenumber" type="text"/>
 
                         <label for="email">Email address</label>
-
-                        <input className="signupInput" name="email" type="text" />
+                        <input className="signupInput" id="email" type="text"/>
 
                         <label for="password">Password</label>
-
-                        <input className="signupInput" name="password" type="text" />
+                        <input className="signupInput" id="password" type="text"/>
 
                         <label for="address">Address</label>
-
-                        <input className="signupInput" name="address" type="text" />
-
+                        <input className="signupInput" id="address" type="text"/>
+                        <br />
                         <label for="city">City</label>
-
-                        <input className="signupInput" name="city" type="text" />
+                        <br />
+                        <input className="signupInput" id="city" type="text"/>
 
                         <label for="state">State</label>
-
-                        <input className="signupInput" name="state" type="text" />
+                        <input className="signupInput" id="state" type="text"/>
 
                         <label for="zip">Zip Code</label>
+                        <input className="signupInput" id="zip" type="text"/>
 
-                        <input className="signupInput" name="zip" type="text" />
-
-
-                        <button className="btn btn-dark btn-md" type="submit">Submit</button>
+                        <button id="signupButton" className="btn btn-dark btn-md" type="submit">Submit</button>
                     </div>
                 </div>
             </div>

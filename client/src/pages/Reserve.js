@@ -15,17 +15,18 @@ const Reserve = props =>
                 <div className="input-group">
                     
                     <input name="search" type="text" id="searchInput" className="form-control" />
-                    <button className="btn btn-dark btn-md" type="submit">Search</button>
+                    <button id="searchButton" className="btn btn-dark btn-md" type="submit">Search</button>
                 </div>
                 
                 <hr/>
                 <h5>Donation Items Available</h5>
                 <div>
                     <input name="donation" type="text" id="donationAvailable" placeholder="donation available" className="form-control" />
-                    <input name="checkbox" type="checkbox" id="checkbox" />
-                    <label for="checkbox">Check to Select</label>
-                    <br/>
-                    <button className="btn btn-dark btn-md" type="submit">Reserve</button>
+                  <div id="checkbox">
+                     <input name="checkbox" type="checkbox" id="checkbox" />
+                     <label for="checkbox">Check to Select</label>
+                     <button id="reserveButton" className="btn btn-dark btn-md" type="submit">Reserve</button>
+                  </div>   
                 </div>
             </div>
             <div className="col-md-2"></div>
@@ -33,11 +34,13 @@ const Reserve = props =>
                 <h5>Items to Pick Up</h5>
                 <div> 
                     <input name="pick-up" type="text" id="pick-up" placeholder="pick-up" className="form-control" />
-                    <input name="checkbox" type="checkbox" id="checkbox" />
-                    <label for="checkbox">Check to Remove</label>
-                    
-                    <button className="btn btn-dark btn-md" type="submit">Remove</button>
-                    <button className="btn btn-dark btn-md" type="submit">Select for Pickup</button>
+                    <div id="checkbox">
+                        <input name="checkbox" type="checkbox" />
+                        <label for="checkbox">Check to Remove</label>                   
+                        <button id="removeButton" className="btn btn-dark btn-md" type="submit">Remove</button>
+                    </div>
+                    <hr />
+                    <button className="btn btn-dark btn-md" type="submit">Select For Pickup</button>
                 </div>
             </div>
         </div>
