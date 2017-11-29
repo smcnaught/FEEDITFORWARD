@@ -3,7 +3,6 @@
     "host": [
       {
         "host": "localhost",
-        "auth": "elastic:changeme",
         "protocol": "http",
         "port": 9200
       }
