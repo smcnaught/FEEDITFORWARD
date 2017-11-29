@@ -31,7 +31,7 @@ class Donate extends Component {
     // validate and submit
     const {id} = event.target;
     console.log("onClick: " + id);
-    if (id === "submitButton") {
+    if (id === "donateSubmitButton") {
       const tags=this.state.tags.split(",").map(tag => tag.trim());
       const donation = Object.assign({},this.state,{tags: tags,donorId: 1});
       API.createDonation(donation)

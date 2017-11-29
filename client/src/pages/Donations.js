@@ -129,32 +129,70 @@ class Donations extends Component {
   };
 
   render = () =>
-    <div className="container-fluid">
-      <div className="row">
-        <div className="input-group">
-          <input name="search" type="text" id="searchInput" className="form-control"/>
-          <button className="btn btn-dark btn-md" type="submit">Search</button>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-md-2">
-          <FacetGroup title="Tags" facets={this.state.tagFacets} handleFacetCheck={this.handleFacetCheck} type="multi-select"/>
+<div className= "donations">
+  <div className= "jumbotron jumbotron-fluid" id="receiveJumbotron">
+    <div className="container">
+      <h1>Welcome</h1>
+      <h2>Search for food that is available for pickup</h2>
+    </div>
+  </div>
+
+  <div className="container-fluid">   
+    <div className="row">
+
+      <div className="col-md-2" id="column1">
+        <h5>Search Results</h5>
+        <FacetGroup title="Tags" facets={this.state.tagFacets} handleFacetCheck={this.handleFacetCheck} type="multi-select"/>
           {/*<FacetGroup title="Color" tree={colorFacetsTree}/>*/}
           {/*<FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>*/}
-        </div>
-        <div className="col-md-10">
-          <List>
-            {
-              this.state.donations.map(donation =>
-                <ListItem>
-                  <DonationResult donation={donation}/>
-                </ListItem>
-              )
-            }
-          </List>
+
+        <List>
+          {
+            this.state.donations.map(donation =>
+              <ListItem>
+                <DonationResult donation={donation}/>
+              </ListItem>
+            )
+          }
+        </List>
+      </div>
+
+      <div className="col-md-5" id="column2">
+        <h5>Search for Available Food Items</h5>
+          <div className="input-group">
+            <input name="search" type="text" id="searchInput" className="form-control"/>
+            <button id="searchButton" className="btn btn-dark btn-md" type="submit">Search</button>
+          </div>
+        <hr />
+        <h5>Donation Items Available</h5>
+        <div>
+          <input name="donation" type="text" id="donationAvailable" placeholder="donation available" className="form-control" />
+          <div id="checkbox">
+            <input name="checkbox" type="checkbox" id="checkbox" />
+            <label for="checkbox">Check to Select</label>
+            <button id="reserveButton" className="btn btn-dark btn-md" type="submit">Reserve</button>
+          </div>   
         </div>
       </div>
+             
+      <div className="col-md-4"id="column3">
+        <h5>Items to Pick Up</h5>
+          <div> 
+            <input name="pick-up" type="text" id="pick-up" placeholder="pick-up" className="form-control" />
+            <div id="checkbox">
+              <input name="checkbox" type="checkbox" />
+              <label for="checkbox">Check to Remove</label>                   
+              <button id="removeButton" className="btn btn-dark btn-md" type="submit">Remove</button>
+            </div>
+            <hr />
+            <button className="btn btn-dark btn-md" type="submit">Select For Pickup</button>
+          </div>
+      </div>
+               
     </div>
+  </div>
+</div>
+
 }
 
 export default Donations;
