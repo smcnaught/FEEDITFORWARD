@@ -48,6 +48,7 @@ class Signup extends Component {
               <h3>How Can I Help?</h3>
               <hr/>
               <img className="card-img-top"
+                   id="signupPic"
                    src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=1868&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"
                    alt="Food"/>
               <div className="card-body">
