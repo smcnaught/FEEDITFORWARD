@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import API from "../utils/API";
+import { withRouter } from 'react-router';
 
 
 class Signup extends Component {
@@ -11,7 +12,7 @@ class Signup extends Component {
     addressCity: "",
     addressState: "",
     addressZip: "",
-    type: "",
+    type: "donator",
     email: "",
     phone: "",
     password: ""
@@ -37,6 +38,12 @@ class Signup extends Component {
       API.createUser(user)
         .then(response =>
           console.log("response:" + JSON.stringify(response, null, 2)))
+      if (this.state.type === 'receiver') {     
+        window.location.href= "/donations";
+      }
+      if (this.state.type === 'donator') {
+        window.location.href= "/donate";
+      }
     }
   }
   render = () =>
@@ -73,6 +80,16 @@ class Signup extends Component {
               <h3>Sign Up</h3>
               <hr/>
               <div className="card-body">
+                <p>
+                  <label for="type">Select Role</label>
+                  <br/>
+                  <div class="styled-select blue semi-square">
+                    <select name="type" id="type" onChange={this.handleInputChange}>
+                      <option value="donator">Donator</option>
+                      <option value="receiver">Receiver</option>
+                    </select>
+                  </div>
+                </p>
                 <p>
                   <label for="organization">Organization Name</label>
                   <br/>
@@ -149,4 +166,4 @@ class Signup extends Component {
 }
 
 
-export default Signup;
+export default withRouter(Signup);
