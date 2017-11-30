@@ -59,6 +59,7 @@ class Donations extends Component {
     donations: [],
     tags: [],
     tagFacets: []
+    
   };
 
   componentDidMount() {
