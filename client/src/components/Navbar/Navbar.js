@@ -8,27 +8,18 @@ const Navbar = props =>
     <div className="container-fluid">
       <div className="navbar-header">
         <Link className="navbar-brand" to="/">
-          Pupster
+          Feed It Forward
         </Link>
       </div>
       <ul className="nav navbar-nav">
-        <li
-          className={
-            window.location.pathname === "/" ||
-            window.location.pathname === "/about"
-              ? "active"
-              : ""
-          }
-        >
-          <Link to="/">About</Link>
+        <li className={window.location.pathname === "/" ? "active" : ""}>
+          <Link to="/login">Log In</Link>
         </li>
-        <li
-          className={window.location.pathname === "/donate" ? "active" : ""}
-        >
-          <Link to="/discover">Discover</Link>
+        <li className={window.location.pathname === "/signup" ? "active" : ""}>
+          <Link to="/signup">Sign Up</Link>
         </li>
-        <li className={window.location.pathname === "/recieve" ? "active" : ""}>
-          <Link to="/search">Search</Link>
+        <li className={window.location.pathname === "/info" ? "active" : ""}>
+          <Link to="/info">How it works</Link>
         </li>
       </ul>
     </div>
