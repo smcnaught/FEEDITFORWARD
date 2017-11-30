@@ -1,4 +1,6 @@
 const db = require("../models");
+const search = require("../lib/search.js");
+const map = require("../lib/map.js");
 
 const findOrCreateTags = ([tagName, ...remainingTagNames], results, callback) => {
   if (tagName) {
@@ -70,7 +72,6 @@ module.exports = {
   },
   createDonation: (req, res) => {
     const tagNames = req.body.tags;
-
     findOrCreateTags(tagNames, [], tags => {
       db.Donation
         .create(req.body)
@@ -85,16 +86,67 @@ module.exports = {
               // them.
               donation.reload({include: [db.Tag]}).then(
                 reloadedDonation => {
-                  const result = Object.assign(
-                    {tags: tagNames},
-                    reloadedDonation.dataValues);
-                  res.json(result);
-                });
-            }
-          );
-        })
-        .catch(err => res.status(500).json(err));
-    });
+                  db.User.findById(reloadedDonation.donorId).then((donor) => {
+                    const donorAddress = [
+                      donor.addressStreet + ",",
+                      donor.addressCity + ",",
+                      donor.addressState,
+                      donor.addressZip
+                    ].join(" ");
+                    const result = Object.assign(
+                      {tags: tagNames},
+                      reloadedDonation.dataValues);
+
+                  map.getGeoPoint(
+                    donorAddress,
+                    (err, location) => {
+                      if (err) {
+                        res.json(result);
+                      }
+                      else {
+                        let tags = reloadedDonation.Tags.map(tag => tag.name);
+
+                        const indexableDonation = {
+                          "id": reloadedDonation.id,
+                          "product_name": reloadedDonation.productName,
+                          "product_quantity": reloadedDonation.productQuantity,
+                          "product_unit": reloadedDonation.productUnit,
+                          "donor_id": reloadedDonation.donorId,
+                          "receiver_id": reloadedDonation.receiverId,
+                          "expiration": reloadedDonation.expiration,
+                          "comments": reloadedDonation.comments,
+                          "status": reloadedDonation.status,
+                          "address_street": donor.addressStreet,
+                          "address_city": donor.addressCity,
+                          "address_state": donor.addressState,
+                          "address_zip": donor.addressZip,
+                          "organization": donor.organization,
+                          "tags": tagNames,
+                          "location": {
+                            "lat": location.lat,
+                            "lon": location.lng
+                          }
+                        };
+                        console.log("indexableDonation: " + JSON.stringify(indexableDonation));
+
+                        search.indexDonation(indexableDonation, (err, indexRes) => {
+                          if (err) {
+                            console.log(err);
+                          }
+                          else {
+                            console.log(indexRes);
+                          }
+                          res.json(result);
+                        });
+                      }
+                    });
+                  });
+                }
+              );
+            })
+            .catch(err => res.status(500).json(err));
+        });
+    })
   },
   findDonationById: function (req, res) {
     db.Donation

@@ -1,14 +1,15 @@
-const elasticsearch = require('elasticsearch');
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/search.json')[env];
+// const elasticsearch = require('elasticsearch');
+// const env = process.env.NODE_ENV || 'development';
+// const config = require(__dirname + '/../config/search.json')[env];
+const search = require("../lib/search.js");
 
-var esClient={};
-
-if (config.use_env_variable) {
-  esClient = null; // TODO: look at how this is configured on Heroku
-} else {
-  esClient = new elasticsearch.Client(config);
-}
+// var esClient={};
+//
+// if (config.use_env_variable) {
+//   esClient = null; // TODO: look at how this is configured on Heroku
+// } else {
+//   //esClient = new elasticsearch.Client(config);
+// }
 
 module.exports = {
   search: (request, response) => {
@@ -28,22 +29,30 @@ module.exports = {
       body: body
     };
 
-    esClient.search(searchParams, function (err, res) {
+
+    search.search(searchParams, (err, res) => {
       if (err) {
-        // handle error
         throw err;
       }
-      const results = res.hits.hits.map(result =>
-        Object.assign(
-          {},
-          result._source,
-          {distance: result.sort[0]}));
-      response.json({
-        results: results,
-        tags: res.aggregations.tags.buckets,
-        page: pageNum,
-        pages: Math.ceil(res.hits.total / perPage)
-      });
+      response.json(res);
     });
+    //
+    // esClient.search(searchParams, function (err, res) {
+    //   if (err) {
+    //     // handle error
+    //     throw err;
+    //   }
+    //   const results = res.hits.hits.map(result =>
+    //     Object.assign(
+    //       {},
+    //       result._source,
+    //       {distance: result.sort[0]}));
+    //   response.json({
+    //     results: results,
+    //     tags: res.aggregations.tags.buckets,
+    //     page: pageNum,
+    //     pages: Math.ceil(res.hits.total / perPage)
+    //   });
+    // });
   }
 }
