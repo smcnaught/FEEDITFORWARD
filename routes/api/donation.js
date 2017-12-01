@@ -8,4 +8,7 @@ router.route("/")
   .get(dbController.findAllDonations)
   .post(dbController.createDonation);
 
+router.route("/user/:userId/item/:itemId")
+	.put(dbController.reserveItem);
+
 module.exports = router;

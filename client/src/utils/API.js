@@ -60,5 +60,9 @@ export default {
     return axios.post(
       '/api/users',
       user);
+  },
+  reserveItem(userId, itemId) {
+    return axios.put(
+      '/api/donations/user/'+ userId + '/item/' + itemId);
   }
 };

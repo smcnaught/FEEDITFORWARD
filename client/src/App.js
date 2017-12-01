@@ -1,7 +1,6 @@
 import React from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import Landing from "./pages/Landing";
-import Header from "./pages/Header";
 import Footer from "./components/Footer";
 import Wrapper from "./components/Wrapper";
 import Signup from "./pages/Signup";
@@ -13,7 +12,6 @@ import "./index.css";
 const App = () =>
   <Router>
     <div>
-      <Header/>
       <Wrapper>
         <Route exact path="/" component={Landing}/>
         <Route exact path="/signup" component={Signup}/>
