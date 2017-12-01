@@ -11,4 +11,7 @@ router.route("/")
 router.route("/user/:userId/item/:itemId")
 	.put(dbController.reserveItem);
 
+router.route('/unreserve/:itemId')
+	.put(dbController.unreserveItem);
+
 module.exports = router;

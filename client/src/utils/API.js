@@ -64,5 +64,8 @@ export default {
   reserveItem(userId, itemId) {
     return axios.put(
       '/api/donations/user/'+ userId + '/item/' + itemId);
+  },
+  unreserveItem(itemId) {
+    return axios.put('/api/donations/unreserve/' + itemId);
   }
 };
