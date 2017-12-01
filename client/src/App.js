@@ -4,6 +4,7 @@ import Landing from "./pages/Landing";
 import Footer from "./components/Footer";
 import Wrapper from "./components/Wrapper";
 import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 import Donations from "./pages/Donations";
 import Donate from "./pages/Donate";
 
@@ -14,6 +15,7 @@ const App = () =>
     <div>
       <Wrapper>
         <Route exact path="/" component={Landing}/>
+        <Route exact path="/login" component={Login}/>
         <Route exact path="/signup" component={Signup}/>
         <Route exact path="/donations" component={Donations}/>
         <Route exact path="/donate" component={Donate}/>

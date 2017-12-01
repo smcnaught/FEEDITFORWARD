@@ -42,7 +42,13 @@ module.exports = {
   createUser: (req, res) => {
     db.User
       .create(req.body)
-      .then(user => res.json(user))
+      .then(user => {
+        user.reload().then(
+          reloaded => {
+            res.json(reloaded.dataValues);
+          }
+        );
+      })
       .catch(err => res.status(500).json(err));
   },
   findUserById: function (req, res) {
@@ -130,6 +136,7 @@ module.exports = {
   reserveItem: function (req, res){
     console.log("--reserveItem", req.params.userId);
     let values = {
+
       receiverId : req.params.userId,
       status : "reserved"
     }
@@ -142,6 +149,7 @@ module.exports = {
       })
 
       .catch(error => res.json(error))
+
   },
   unreserveItem: function (req, res) {
     let values = {
@@ -155,5 +163,6 @@ module.exports = {
           .then(result => res.json(result))
           .catch(error => res.json(error));
       });
+
   }
 };
