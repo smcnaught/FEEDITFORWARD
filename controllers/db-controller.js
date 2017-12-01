@@ -42,7 +42,13 @@ module.exports = {
   createUser: (req, res) => {
     db.User
       .create(req.body)
-      .then(user => res.json(user))
+      .then(user => {
+        user.reload().then(
+          reloaded => {
+            res.json(reloaded);
+          }
+        );
+      })
       .catch(err => res.status(500).json(err));
   },
   findUserById: function (req, res) {
@@ -126,5 +132,21 @@ module.exports = {
       })
       .then(donations => res.json(dbDonationsToAPI(donations)))
       .catch(err => res.status(500).json(err));
+  },
+  reserveItem: function (req, res){
+    console.log("--reserveItem", req.params.userId);
+    let values = {
+      receiverId : req.params.itemId,
+      status : "reserved"
+    }
+    db.Donation
+      .findById(req.params.userId)
+      .then(item =>{
+        item.update(values)
+        .then(result => res.json(result))
+        .catch(error => res.json(error));
+      })
+
+      .catch(error => res.json(error))
   }
 };
