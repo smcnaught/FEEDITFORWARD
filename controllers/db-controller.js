@@ -136,17 +136,33 @@ module.exports = {
   reserveItem: function (req, res){
     console.log("--reserveItem", req.params.userId);
     let values = {
-      receiverId : req.params.itemId,
+
+      receiverId : req.params.userId,
       status : "reserved"
     }
     db.Donation
-      .findById(req.params.userId)
-      .then(item =>{
+      .findById(req.params.itemId)
+      .then(item =>{ 
         item.update(values)
         .then(result => res.json(result))
         .catch(error => res.json(error));
       })
 
       .catch(error => res.json(error))
+
+  },
+  unreserveItem: function (req, res) {
+    let values = {
+      receiverId : null,
+      status : "available"
+    }
+    db.Donation
+      .findById(req.params.itemId)
+      .then(item => {
+        item.update(values)
+          .then(result => res.json(result))
+          .catch(error => res.json(error));
+      });
+
   }
 };

@@ -3,9 +3,9 @@ import React from "react";
 
 export const DonationResult = props =>
   <div>
-    product:&nbsp;{props.donation.product_name},&nbsp;
-    quantity:&nbsp;{props.donation.product_quantity}&nbsp;{props.donation.product_unit},&nbsp;
+    product:&nbsp;{props.donation.productName},&nbsp;
+    quantity:&nbsp;{props.donation.productQuantity}&nbsp;{props.donation.productUnit},&nbsp;
     expiration:&nbsp;{props.donation.expiration}&nbsp;
-    distance:&nbsp;{props.donation.distance}
+    
   </div>;
 

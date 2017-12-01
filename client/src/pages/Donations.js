@@ -57,26 +57,36 @@ class Donations extends Component {
 
   state = {
     donations: [],
+    reservedItems: [],
     tags: [],
     tagFacets: []
     
   };
 
   componentDidMount() {
-    API.searchAllDonations()
-      .then(res => {
-        const currentFacetMap = this.state.tagFacets.reduce((a,e) => a[e.key]=e,{});
-        const tags = res.data.tags;
-        const newTagFacets = tags.map(tagFacet => {
-          const currentFacet = currentFacetMap[tagFacet.key];
-          return currentFacet || Object.assign(tagFacet,{isSelected: false});
-        });
+    this.getAllDonations();
+  };
 
+  getAllReservedItems = () => {
+    const userId = 1;// TODO: fix this to get from user session
+    API.getDonations()
+      .then(res => {
+        this.setState({
+          reservedItems: res.data.filter(item => (item.status === 'reserved' && item.receiverId == userId))
+        });
+      })
+      .catch(error => { console.warn(error) });
+  };
+
+  getAllDonations = () => {
+    API.getDonations()
+      .then(res => {
+        console.log("res", res);
         this.setState(
             {
-              donations: res.data.results,
-              tags: res.data.tags,
-              tagFacets: newTagFacets
+              donations: res.data
+              // tags: res.data.tags,
+              // tagFacets: newTagFacets
             });
         }
       )
@@ -128,6 +138,53 @@ class Donations extends Component {
       this.componentDidMount();
     }
   };
+  saveItem = (event) =>
+  {
+    let itemId = event.target.id;
+    let userId = 1;//TO DO make to current logged in user
+    let index = this.state.donations.findIndex(donation => donation.id == itemId);
+    let donationsCopy = this.state.donations;
+    let updatedReservedItems = this.state.reservedItems;
+
+    donationsCopy[index].receiverId = userId;
+    donationsCopy[index].status = 'reserved';
+
+    updatedReservedItems.push(donationsCopy[index]);
+    
+    API.reserveItem(userId, itemId)
+      .then(item => {
+        console.log("it saved my food", item);
+        this.getAllDonations();
+        // this.setState({
+        //   donations: donationsCopy,
+        //   reservedItems: updatedReservedItems
+        // })
+      })
+      .catch(error => console.log("there was an error", error));
+  };
+
+  removeItem = event => {
+    let itemId = event.target.id;
+    let donationsCopy = this.state.donations;
+    let index = this.state.reservedItems.findIndex(donation => donation.id == itemId);
+    let currentItem = this.state.reservedItems[index];
+    currentItem.status = 'available';
+    currentItem.receiverId = null;
+    donationsCopy.push(currentItem);
+
+    API.unreserveItem(itemId)
+      .then(item => {
+        console.log('it worked to unreserve the item');
+        this.getAllDonations();
+        this.getAllReservedItems();
+        // this.setState({
+        //   reservedItems: this.state.reservedItems.filter(currentItem => currentItem.id != itemId),
+        //   donations: donationsCopy
+        // });
+      })
+      .catch(error => console.warn('there was an error unreserving the item', error));
+  }
+
 
   render = () =>
 <div className= "donations">
@@ -146,47 +203,47 @@ class Donations extends Component {
         <FacetGroup title="Tags" facets={this.state.tagFacets} handleFacetCheck={this.handleFacetCheck} type="multi-select"/>
           {/*<FacetGroup title="Color" tree={colorFacetsTree}/>*/}
           {/*<FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>*/}
-
-        <List>
-          {
-            this.state.donations.map(donation =>
-              <ListItem>
-                <DonationResult donation={donation}/>
-              </ListItem>
-            )
-          }
-        </List>
       </div>
 
       <div className="col-md-5" id="column2">
         <h5>Search for Available Food Items</h5>
           <div className="input-group">
-            <input name="search" type="text" id="searchInput" className="form-control"/>
+            <input name="search" type="text" id="searchInput" className="form-control" value={this.setState.donations}/>
             <button id="searchButton" className="btn btn-dark btn-md" type="submit">Search</button>
           </div>
         <hr />
         <h5>Donation Items Available</h5>
         <div>
-          <input name="donation" type="text" id="donationAvailable" placeholder="donation available" className="form-control" />
-          <div id="checkbox">
-            <input name="checkbox" type="checkbox" id="checkbox" />
-            <label for="checkbox">Check to Select</label>
-            <button id="reserveButton" className="btn btn-dark btn-md" type="submit">Reserve</button>
-          </div>   
+        <List>
+          {
+            this.state.donations.filter(donation => donation.status === "available")
+            .map(donation =>
+              <ListItem key={donation.id}>
+                <DonationResult donation={donation}/>
+                 <button id={donation.id} className="btn btn-dark btn-md" type="submit" onClick={this.saveItem}>Reserve</button>
+              </ListItem>
+            )
+          } 
+        </List>
+
         </div>
       </div>
              
       <div className="col-md-4"id="column3">
         <h5>Items to Pick Up</h5>
-          <div> 
-            <input name="pick-up" type="text" id="pick-up" placeholder="pick-up" className="form-control" />
-            <div id="checkbox">
-              <input name="checkbox" type="checkbox" />
-              <label for="checkbox">Check to Remove</label>                   
-              <button id="removeButton" className="btn btn-dark btn-md" type="submit">Remove</button>
-            </div>
+          <div>
+            <List>
+              {
+                this.state.reservedItems.map(item =>
+                  <ListItem key={item.id}>
+                    <DonationResult donation={item} />
+                    <button id={item.id} className="btn btn-dark btn-md" onClick={this.removeItem}>Un reserve</button>
+                  </ListItem>
+                )
+              }
+            </List>
             <hr />
-            <button className="btn btn-dark btn-md" type="submit">Select For Pickup</button>
+            
           </div>
       </div>
                
