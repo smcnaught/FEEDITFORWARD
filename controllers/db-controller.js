@@ -45,6 +45,7 @@ module.exports = {
       .then(user => {
         user.reload().then(
           reloaded => {
+            console.log(reloaded.dataValues.id);
             res.json(reloaded.dataValues);
           }
         );

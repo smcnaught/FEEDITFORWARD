@@ -32,20 +32,23 @@ class Signup extends Component {
   onClick = event => {
     // validate and submit
     const {id} = event.target;
-    console.log("onClick: " + id);
+    console.log("onClick: " + id); 
     if (id === "submitButton") {
       const user = this.state;
       API.createUser(user)
-        .then(response =>
-          console.log("response:" + JSON.stringify(response, null, 2)))
-      if (this.state.type === 'receiver') {     
-        window.location.href= "/donations";
-      }
-      if (this.state.type === 'donator') {
-        window.location.href= "/donate";
-      }
+        .then(response => {
+          console.log("Here:", response);
+          window.localStorage.setItem('user_id', response.data.id)
+          if (this.state.type === 'receiver') {     
+            window.location.href= "/donations";
+          }
+          if (this.state.type === 'donator') {
+            window.location.href= "/donate";
+          }
+        })
     }
   }
+
   render = () =>
     <div className="signup">
       <div className="container" id="signUp">
