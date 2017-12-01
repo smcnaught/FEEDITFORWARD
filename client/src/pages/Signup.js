@@ -40,7 +40,7 @@ class Signup extends Component {
           console.log("Here:", response);
           window.localStorage.setItem('user_id', response.data.id)
           if (this.state.type === 'receiver') {     
-            window.location.href= "/donations";
+            window.location.href= "/donations"; 
           }
           if (this.state.type === 'donator') {
             window.location.href= "/donate";
