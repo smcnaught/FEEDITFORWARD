@@ -57,7 +57,7 @@ module.exports = {
       .findById(req.params.id)
       .then(user => {
         if (user) {
-          res.json(user);
+          res.json(user.dataValues);
         }
         else {
           res.status(404).send(`User with id=${req.params.id} not found.`);
@@ -165,5 +165,21 @@ module.exports = {
           .catch(error => res.json(error));
       });
 
+  },
+  login: (req,res) => {
+    db.User.findOne({where: {email: req.params.email}}).then( resp => {
+      if (result.password === resp.dataValues.password) {
+        const result = Object.assign({}, resp.dataValues);
+        delete result.password;
+        res.json(result);
+      }
+      else {
+        res.status(401).send("Incorrect Username or Password");
+      }
+      })
+      .catch( err => {
+        console.log("err: " + err);
+        res.status(404).send("user not found!");
+    })
   }
 };

@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import API from "../utils/API";
-import { withRouter } from 'react-router';
+import {withRouter} from 'react-router';
 
 
 class Signup extends Component {
   state = {
+    state: "choose",
     firstName: "",
     lastName: "",
     organization: "",
@@ -19,7 +20,24 @@ class Signup extends Component {
   };
 
   componentDidMount() {
-    // could grab list of labels
+    const userId = window.localStorage.getItem('user_id');
+
+    if (userId) {
+      API.getUserById(userId).then(response => {
+        switch (response.data.type) {
+          case "receiver":
+            window.location.href = "/donations";
+            break;
+          case "donator":
+            window.location.href = "/donate";
+            break;
+        }
+      })
+        .catch((err) => {
+          console.log(err);
+          window.localStorage.removeItem('user_id');
+        });
+    }
   };
 
   handleInputChange = event => {
@@ -32,23 +50,175 @@ class Signup extends Component {
   onClick = event => {
     // validate and submit
     const {id} = event.target;
-    console.log("onClick: " + id); 
-    if (id === "submitButton") {
-      const user = this.state;
-      API.createUser(user)
-        .then(response => {
-          console.log("Here:", response);
-          window.localStorage.setItem('user_id', response.data.id)
-          if (this.state.type === 'receiver') {     
-            window.location.href= "/donations"; 
-          }
-          if (this.state.type === 'donator') {
-            window.location.href= "/donate";
-          }
-        })
+    console.log("onClick: " + id);
+    switch(id) {
+      case "loginButton":
+        this.setState({state: "login"});
+        break;
+      case "signupButton":
+        this.setState({state: "signup"});
+        break;
+      case "submitButton":
+        if (this.state.state == "signup") {
+          const user = this.state;
+          API.createUser(user)
+            .then(response => {
+              console.log("Here:", response);
+              window.localStorage.setItem('user_id', response.data.id);
+              this.componentDidMount();
+            })
+        }
+        else {
+          API.login(this.state.email,this.state.password).then( response => {
+            window.localStorage.setItem('user_id', response.data.id);
+            this.componentDidMount();
+            }
+          ).catch (err => {
+            console.log(err);
+            }
+          );
+        }
+        break;
     }
   }
+  select = () => {
+    switch(this.state.state) {
+      case "init":
+        return (
+        <div className="col-md-5 card-body">
+          <button className="btn btn-dark btn-md" type="submit" id="loginButton"
+                  onClick={this.onClick}>
+            Log In
+          </button>
+          <button className="btn btn-dark btn-md" type="submit" id="signupButton"
+                  onClick={this.onClick}>
+            Sign Up
+          </button>
+        </div>
+      );
+        return "init";
+      case "signup":
+        return (
+          <div className="col-md-5">
+            <div id="signupCard">
+              <h3>Sign Up</h3>
+              <hr/>
+              <div className="card-body">
+                <p>
+                  <label htmlFor="type">Select Role</label>
+                  <br/>
+                  <div className="styled-select blue semi-square">
+                    <select name="type" id="type" onChange={this.handleInputChange}>
+                      <option value="donator">Donator</option>
+                      <option value="receiver">Receiver</option>
+                    </select>
+                  </div>
+                </p>
+                <p>
+                  <label htmlFor="organization">Organization Name</label>
+                  <br/>
+                  <input className="signupInput" id="organization" name="organization" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+                <p>
+                  <label htmlFor="firstName">First Name</label>
+                  <br/>
+                  <input className="signupInput" id="firstName" name="firstName" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
 
+                <p>
+                  <label htmlFor="lastName">Last Name</label>
+                  <br/>
+                  <input className="signupInput" id="lastName" name="lastName" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+
+                <p>
+                  <label htmlFor="phone">Phone Number</label>
+                  <br/>
+                  <input className="signupInput" id="phone" name="phone" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+
+                <p>
+                  <label htmlFor="email">Email address</label>
+                  <br/>
+                  <input className="signupInput" id="email" name="email" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+
+                <p>
+                  <label htmlFor="password">Password</label>
+                  <br/>
+                  <input className="signupInput" id="password" name="password" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+                <p>
+                  <label htmlFor="addressStreet">Street</label>
+                  <br/>
+                  <input className="signupInput" id="addressStreet" name="addressStreet" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+
+                <p>
+                  <label htmlFor="addressCity">City</label>
+                  <br/>
+                  <input className="signupInput" id="addressCity" name="addressCity" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+                <p>
+                  <label htmlFor="addressState">State</label>
+                  <br/>
+                  <input className="signupInput" id="addressState" name="addressState" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+
+                <p>
+                  <label htmlFor="addressZip">Zip Code</label>
+                  <br/>
+                  <input className="signupInput" id="addressZip" name="addressZip" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+                <p>
+                  <button className="btn btn-dark btn-md" type="submit" id="submitButton"
+                          onClick={this.onClick}>
+                    Submit
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>);
+      case "login":
+        return (
+          <div className="col-md-5">
+            <div id="signupCard">
+              <h3>Log In</h3>
+              <hr/>
+              <div className="card-body">
+                <p>
+                  <label htmlFor="email">Email address</label>
+                  <br/>
+                  <input className="signupInput" id="email" name="email" type="text" onChange={this.handleInputChange}/>
+                </p>
+
+                <p>
+                  <label htmlFor="password">Password</label>
+                  <br/>
+                  <input className="signupInput" id="password" name="password" type="text"
+                         onChange={this.handleInputChange}/>
+                </p>
+                <p>
+                  <button className="btn btn-dark btn-md" type="submit" id="submitButton" onClick={this.onClick}>Submit</button>
+                </p>
+              </div>
+            </div>
+          </div>);
+      default:
+        this.setState({state: "init"});
+        return "default";
+    }
+  }
   render = () =>
     <div className="signup">
       <div className="container" id="signUp">
@@ -77,91 +247,8 @@ class Signup extends Component {
           </div>
 
           <div className="col-md-1"></div>
-
           <div className="col-md-5">
-            <div id="signupCard">
-              <h3>Sign Up</h3>
-              <hr/>
-              <div className="card-body">
-                <p>
-                  <label for="type">Select Role</label>
-                  <br/>
-                  <div class="styled-select blue semi-square">
-                    <select name="type" id="type" onChange={this.handleInputChange}>
-                      <option value="donator">Donator</option>
-                      <option value="receiver">Receiver</option>
-                    </select>
-                  </div>
-                </p>
-                <p>
-                  <label for="organization">Organization Name</label>
-                  <br/>
-                  <input className="signupInput" id="organization" name="organization" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-                <p>
-                  <label for="firstName">First Name</label>
-                  <br/>
-                  <input className="signupInput" id="firstName" name="firstName" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-
-                <p>
-                  <label for="lastName">Last Name</label>
-                  <br/>
-                  <input className="signupInput" id="lastName" name="lastName" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-
-                <p>
-                  <label for="phone">Phone Number</label>
-                  <br/>
-                  <input className="signupInput" id="phone" name="phone" type="text" onChange={this.handleInputChange}/>
-                </p>
-
-                <p>
-                  <label for="email">Email address</label>
-                  <br/>
-                  <input className="signupInput" id="email" name="email" type="text" onChange={this.handleInputChange}/>
-                </p>
-
-                <p>
-                  <label for="password">Password</label>
-                  <br/>
-                  <input className="signupInput" id="password" name="password" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-                <p>
-                  <label for="addressStreet">Street</label>
-                  <br/>
-                  <input className="signupInput" id="addressStreet" name="addressStreet" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-
-                <p>
-                  <label for="addressCity">City</label>
-                  <br/>
-                  <input className="signupInput" id="addressCity" name="addressCity" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-                <p>
-                  <label for="addressState">State</label>
-                  <br/>
-                  <input className="signupInput" id="addressState" name="addressState" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-
-                <p>
-                  <label for="addressZip">Zip Code</label>
-                  <br/>
-                  <input className="signupInput" id="addressZip" name="addressZip" type="text"
-                         onChange={this.handleInputChange}/>
-                </p>
-                <p>
-                  <button className="btn btn-dark btn-md" type="submit" id="submitButton" onClick={this.onClick}>Submit</button>
-                </p>
-              </div>
-            </div>
+            {this.select()}
           </div>
         </div>
       </div>
