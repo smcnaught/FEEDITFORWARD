@@ -82,6 +82,7 @@ h2{
 
 #pick-up {
 	width: 400px;
+
 }
 
 /*sign up page*/
@@ -159,7 +160,7 @@ h2{
 	margin-top: 15px;
 }
 #donatePic {
-
+	height: 330px;
 }
 
 .styled-select {
