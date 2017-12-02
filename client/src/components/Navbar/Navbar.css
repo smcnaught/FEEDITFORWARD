@@ -1,4 +1,63 @@
 nav.navbar.navbar-default {
-  margin-bottom: 0;
+  margin: 0;
+  padding: 0;
+
 }
+
+.container-fluid {
+
+  	background: #ECE9E6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	box-shadow: 0 8px 6px -6px black;
+	width: 100%;
+	margin-top: 0;
+
+}
+
+/*ul {
+
+	display: block;
+	padding-right: 15px;
+}*/
+
+img {
+
+	height: 80px;
+	width: auto;
+}
+
+
+
+
+.navbar-nav {
+	display: inline-block;
+	list-style: none;
+	/*width: px;*/
+	margin-right: 20px;
+	padding-left: 15px; 
+}
+.navbar-nav li {
+	float: right; 
+}
+.navbar-nav li a {
+	display: inline-block;
+	padding: 8px 15px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #0099CC;
+	border-right: 1px solid #0099CC; 
+	float: right;
+}
+
+.navbar-nav li a:hover {
+
+	color: red;
+}
+
+/*.navbar-nav li a:active {
+
+	color: yellow;
+}*/
 

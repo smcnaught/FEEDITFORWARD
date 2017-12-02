@@ -3,7 +3,6 @@ import API from "../utils/API";
 import {FacetGroup} from "../components/Facets/FacetGroup";
 import {DonationResult} from "../components/Donation/DonationResult";
 import {List, ListItem} from "../components/List";
-import Navbar from "../components/Navbar/Navbar";
 
 class Donations extends Component {
 
@@ -122,7 +121,6 @@ class Donations extends Component {
   render = () => {
     //console.log(this.state);
     return <div className="donations">
-      <Navbar/>
       <div className="jumbotron jumbotron-fluid" id="receiveJumbotron">
         <div className="container">
           <h1>Welcome</h1>

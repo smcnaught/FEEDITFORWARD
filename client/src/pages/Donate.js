@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import API from "../utils/API";
-import Navbar from "../components/Navbar/Navbar";
 
 class Donate extends Component {
 
@@ -53,7 +52,6 @@ class Donate extends Component {
 
   render = () =>
   <div className="donate">
-    <Navbar/>
     <div className="container" id="donate">
       <div className="row">
         <div className="col-md-5" id="donateColumn1">

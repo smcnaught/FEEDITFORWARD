@@ -232,13 +232,10 @@ class Signup extends Component {
         <div className="row">
           <div className="col-md-5">
             <div id="signupCard">
-              <h3>How Can I Help?</h3>
+              <h3>How We Help?</h3>
               <hr/>
-              <img className="card-img-top"
-                   id="signupPic"
-                   src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=1868&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"
-                   alt="Food"/>
-              <div className="card-body">
+             
+              <div className="card-body1">
                 <p>Restaurants and grocery stores are lacking resources to help them use up their excess food. Food that
                   is left over from a regular business day is typically thrown away resulting in millions of dollars of
                   food being wasted.</p>

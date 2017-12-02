@@ -1,3 +1,22 @@
+body {
+
+	
+}
+
+/*navbar*/
+.navbar {
+	padding-top: 20px;
+}
+#navHome {
+	margin: 7px;
+}
+#navLogin {
+	margin: 7px;
+}
+#navContact {
+	margin: 7px;
+}
+
 /*donations page*/
 #receiveJumbotron{
 	background: url(https://images.unsplash.com/photo-1441123285228-1448e608f3d5?auto=format&fit=crop&w=1950&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D);
@@ -18,26 +37,18 @@ h2{
 	text-align: center;
 }
 
-/*#donationColumn1{
-	border: 1px solid #DDD;
-	box-shadow: 1px 1px 1px  #888888;
+#column1{
+	border-right: 1px solid #DDD;
 	margin-right: 15px;
 	margin-left: 15px;
-}*/
-
-#donationColumn2{
-	border: 1px solid #DDD;
-	box-shadow: 1px 1px 1px  #888888;
-	margin-right: 15px;
-	margin-left: 20px;
-	/*padding-top: 10px;*/
 }
-#donationColumn3{
-	border: 1px solid #DDD;
-	box-shadow: 1px 1px 1px  #888888;
+
+#column2{
+	border-right: 1px solid #DDD;
 	margin-right: 15px;
-	margin-left: 20px;
-	padding-top: 20px;
+}
+#column3{
+	margin-left: 15px;
 }
 
 .container{
@@ -48,13 +59,23 @@ h2{
     color: white;
     cursor: pointer;
 }
-.btn{
-	margin-top: 5px;
+#searchButton{
+	margin-left: 10px;
 }
-/*#searchInput {
+#reserveButton{
+	margin-left: 20px;
+}
+#removeButton {
+	margin-left: 20px;
+}
+#checkbox {
+	margin-right: 3px;
+	margin-top: 15px;
+}
+
+#searchInput {
 	width: 300px;
 }
-*/
 #donationAvailable {
 	width: 400px;
 }
@@ -63,31 +84,84 @@ h2{
 	width: 400px;
 }
 
+/*sign up page*/
+#signupPic{
+	height: 310px;
+	width: 250px;
+	float: left;
+	margin-top: 30px;
+	margin-left: -4px;
+	padding-right: 10px;
+}
+
+
+
+/*********** Sign up Login page box**********/
+
+/*.card-body1 {
+
+	position: relative;
+	z-index: 1;
+}
+
+.paragraph {
+
+	z-index: 2;
+}
+
+
+.card-body1 .box {
+	
+
+	background-color: #E5EAEA;
+	opacity: .8;
+	padding-left: 10px;
+	padding-right: 10px;
+
+}*/
+
+
+
+.card-body{
+	margin-left: -25px;
+
+}
+
+#signUp {
+	padding: 30px;
+
+}
+
+	
+
+#signupCard{
+	width: 450px;
+	
+}
+
+.signupInput{
+	width: 400px;
+}
+
+/*.col-md-5-border{
+  border:thin black solid;
+  margin:20px;
+  padding:20px;
+}*/
+
+#signupButton{
+	margin-top: 15px;
+}
+
 /*donate page*/
 
 #donateSubmitButton{
 	margin-top: 15px;
 }
-/*#donatePic{
-	width: 115px;
-	height: 180px;
-}*/
-#donateColumn1{
-	border: 1px solid #DDD;
-	box-shadow: 1px 1px 1px  #888888;
-	/*border-right: 1px solid #DDD;*/
-	margin-right: 15px;
-	margin-left: 20px;
-	padding-top: 10px;
+#donatePic {
+
 }
-#donateColumn2{
-	border: 1px solid #DDD;
-	box-shadow: 1px 1px 1px #888888;
-	/*border-right: 1px solid #DDD;*/
-	margin-right: 15px;
-	margin-left: 20px;
-	padding-top: 10px;
-}
+
 .styled-select {
    background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
    height: 40px;
@@ -115,3 +189,29 @@ h2{
 .blue    { background-color: #3b8ec2; }
 
 .blue select    { color: #000; }
+
+.signup {
+	background-image: url("bgPic.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	
+}
+
+/*********** Sign up Login page box**********/
+
+/*.card-body {
+
+	background-color: #E5EAEA;
+	opacity: .4;
+}*/
+
+
+
+
+
+
+
+
+
+
+
