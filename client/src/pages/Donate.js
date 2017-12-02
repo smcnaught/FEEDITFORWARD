@@ -44,7 +44,7 @@ class Donate extends Component {
   <div className="donate">
     <div className="container" id="donate">
       <div className="row">
-        <div className="col-md-5">
+        <div className="col-md-5" id="donateColumn1">
           <div className="donateCard">
             <h3>Enter Donation Item</h3>
             <hr />
@@ -54,9 +54,9 @@ class Donate extends Component {
               <label htmlFor="productQuantity">Product Quantity</label>
               <input name="productQuantity" type="number" id="productQuantity" onChange={this.handleInputChange} className="form-control"/>
 
-              <div class="form-group">
+              <div className="form-group">
                 <label htmlFor="productUnit">Units</label>
-                <select class="form-control" id="sel1">
+                <select className="form-control" id="sel1">
                   <option></option>
                   <option>lb</option>
                   <option>gal</option>
@@ -65,17 +65,15 @@ class Donate extends Component {
               </div>
                 <label htmlFor="expiration">Expiration</label>
                 <input name="expiration" type="datetime-local" id="expiration" onChange={this.handleInputChange} className="form-control"/>
-                <label htmlFor="tags">Tags</label>
-                <input name="tags" type="text" id="expiration" onChange={this.handleInputChange} className="form-control"/>
+                {/*<label htmlFor="tags">Tags</label>
+                <input name="tags" type="text" id="expiration" onChange={this.handleInputChange} className="form-control"/>*/}
                 <button id="donateSubmitButton" className="btn btn-dark btn-md" type="submit" onClick={this.onClick}>Submit</button>
             </div>
           </div>
         </div>
 
-        <div className="col-md-1"> </div>
-
-        <div className="col-md-5">
-          <div id="donateCard">
+        <div className="col-md-6" id="donateColumn2">
+          <div className="donateCard">
             <h3>Donation Requirements</h3>
             <hr />
             <img id="donatePic" className="card-img-top"
@@ -85,7 +83,7 @@ class Donate extends Component {
               <p>Enter the donation items that you have available for pickup. Donations must be picked up on the same day they are offered.</p>
               <p>Enter a time frame for pickup that will allow the food to be used and not spoil.</p>
               <p>Please have donations packaged and ready for pickup at the designated reservation time.</p>
-              <p>Any reservation that is not picked up by the end of business day can not be placed up for donation again.</p>
+              <p>Any reservation that is not picked up by the end of business day can not be placed for donation again.</p>
             </div>
           </div>
         </div>

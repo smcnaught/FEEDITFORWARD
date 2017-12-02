@@ -22,7 +22,6 @@ const App = () =>
         <Route exact path="/donations" component={Donations}/>
         <Route exact path="/donate" component={Donate}/>
       </Wrapper>
-      <Footer/>
     </div>
   </Router>;
 

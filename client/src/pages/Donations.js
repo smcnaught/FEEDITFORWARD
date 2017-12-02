@@ -195,62 +195,67 @@ class Donations extends Component {
     </div>
   </div>
 
-  <div className="container-fluid">   
-    <div className="row">
+  <div className="container">   
+      <div className="row">
 
-      <div className="col-md-2" id="column1">
-        <h5>Search Results</h5>
-        <FacetGroup title="Tags" facets={this.state.tagFacets} handleFacetCheck={this.handleFacetCheck} type="multi-select"/>
-          {/*<FacetGroup title="Color" tree={colorFacetsTree}/>*/}
-          {/*<FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>*/}
-      </div>
-
-      <div className="col-md-5" id="column2">
-        <h5>Search for Available Food Items</h5>
-          <div className="input-group">
-            <input name="search" type="text" id="searchInput" className="form-control" value={this.setState.donations}/>
-            <button id="searchButton" className="btn btn-dark btn-md" type="submit">Search</button>
-          </div>
-        <hr />
-        <h5>Donation Items Available</h5>
-        <div>
-        <List>
-          {
-            this.state.donations.filter(donation => donation.status === "available")
-            .map(donation =>
-              <ListItem key={donation.id}>
-                <DonationResult donation={donation}/>
-                 <button id={donation.id} className="btn btn-dark btn-md" type="submit" onClick={this.saveItem}>Reserve</button>
-              </ListItem>
-            )
-          } 
-        </List>
-
-        </div>
-      </div>
-             
-      <div className="col-md-4"id="column3">
-        <h5>Items to Pick Up</h5>
-          <div>
-            <List>
-              {
-                this.state.reservedItems.map(item =>
-                  <ListItem key={item.id}>
-                    <DonationResult donation={item} />
-                    <button id={item.id} className="btn btn-dark btn-md" onClick={this.removeItem}>Un reserve</button>
-                  </ListItem>
-                )
-              }
-            </List>
+        {/*<div className="col-md-2" id="donationColumn1">
+          <h5>Search Results</h5>
+          <FacetGroup title="Tags" facets={this.state.tagFacets} handleFacetCheck={this.handleFacetCheck} type="multi-select"/>
+            /*<FacetGroup title="Color" tree={colorFacetsTree}/>*/
+            /*<FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>
+        </div>*/}
+        
+        <div className="col-md-5" id="donationColumn2">
+          <div className= "donationCard">
+            <div className= "card-body">
+            {/*<h5>Search for Available Food Items</h5>
+              <div className="input-group">
+                <input name="search" type="text" id="searchInput" className="form-control" value={this.setState.donations}/>
+                <button id="searchButton" className="btn btn-dark btn-md" type="submit">Search</button>
+              </div>
+            <hr />*/}
+            <h5>Donation Items Available</h5>
             <hr />
-            
+            <div>
+              <List>
+                {
+                  this.state.donations.filter(donation => donation.status === "available")
+                  .map(donation =>
+                    <ListItem key={donation.id}>
+                      <DonationResult donation={donation}/>
+                       <button id={donation.id} className="btn btn-dark btn-md" type="submit" onClick={this.saveItem}>Reserve</button>
+                    </ListItem>
+                  )
+                } 
+              </List>
+            </div>
           </div>
-      </div>
+        </div>
+      </div>  
                
+      <div className="col-md-6"id="donationColumn3">
+        <div className= "donationCard">
+          <h5>Items to Pick Up</h5>
+          <hr />
+            <div className= "card-body">
+              <div>
+                <List>
+                  {
+                    this.state.reservedItems.map(item =>
+                      <ListItem key={item.id}>
+                        <DonationResult donation={item} />
+                        <button id={item.id} className="btn btn-dark btn-md" onClick={this.removeItem}>Remove</button>
+                      </ListItem>
+                    )
+                  }
+                </List>            
+              </div>
+            </div>        
+        </div>   
+      </div>               
     </div>
   </div>
 </div>
-
 }
 
 export default Donations;
