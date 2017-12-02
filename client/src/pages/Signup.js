@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import API from "../utils/API";
 import {withRouter} from 'react-router';
 
-
 class Signup extends Component {
   state = {
     state: "choose",
@@ -51,7 +50,7 @@ class Signup extends Component {
     // validate and submit
     const {id} = event.target;
     console.log("onClick: " + id);
-    switch(id) {
+    switch (id) {
       case "loginButton":
         this.setState({state: "login"});
         break;
@@ -69,12 +68,12 @@ class Signup extends Component {
             })
         }
         else {
-          API.login(this.state.email,this.state.password).then( response => {
-            window.localStorage.setItem('user_id', response.data.id);
-            this.componentDidMount();
+          API.login(this.state.email, this.state.password).then(response => {
+              window.localStorage.setItem('user_id', response.data.id);
+              this.componentDidMount();
             }
-          ).catch (err => {
-            console.log(err);
+          ).catch(err => {
+              console.log(err);
             }
           );
         }
@@ -82,20 +81,26 @@ class Signup extends Component {
     }
   }
   select = () => {
-    switch(this.state.state) {
+    switch (this.state.state) {
       case "init":
         return (
-        <div className="col-md-5 card-body">
-          <button className="btn btn-dark btn-md" type="submit" id="loginButton"
-                  onClick={this.onClick}>
-            Log In
-          </button>
-          <button className="btn btn-dark btn-md" type="submit" id="signupButton"
-                  onClick={this.onClick}>
-            Sign Up
-          </button>
-        </div>
-      );
+          <div className="col-md-12 card-body">
+            <h3></h3>
+            <hr/>
+            <div className="col-md-6">
+              <button className="btn btn-dark btn-md" type="submit" id="loginButton"
+                      onClick={this.onClick}>
+                Log In
+              </button>
+            </div>
+            <div className="col-md-6">
+              <button className="btn btn-dark btn-md" type="submit" id="signupButton"
+                      onClick={this.onClick}>
+                Sign Up
+              </button>
+            </div>
+          </div>
+        );
         return "init";
       case "signup":
         return (
@@ -151,7 +156,7 @@ class Signup extends Component {
                 <p>
                   <label htmlFor="password">Password</label>
                   <br/>
-                  <input className="signupInput" id="password" name="password" type="text"
+                  <input className="signupInput" id="password" name="password" type="password"
                          onChange={this.handleInputChange}/>
                 </p>
                 <p>
@@ -205,11 +210,13 @@ class Signup extends Component {
                 <p>
                   <label htmlFor="password">Password</label>
                   <br/>
-                  <input className="signupInput" id="password" name="password" type="text"
+                  <input className="signupInput" id="password" name="password" type="password"
                          onChange={this.handleInputChange}/>
                 </p>
                 <p>
-                  <button className="btn btn-dark btn-md" type="submit" id="submitButton" onClick={this.onClick}>Submit</button>
+                  <button className="btn btn-dark btn-md" type="submit" id="submitButton" onClick={this.onClick}>
+                    Submit
+                  </button>
                 </p>
               </div>
             </div>
@@ -254,6 +261,5 @@ class Signup extends Component {
       </div>
     </div>
 }
-
 
 export default withRouter(Signup);
