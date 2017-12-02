@@ -1,7 +1,6 @@
 import React from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import Landing from "./pages/Landing";
-import Footer from "./components/Footer";
 import Wrapper from "./components/Wrapper";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
@@ -20,7 +19,6 @@ const App = () =>
         <Route exact path="/donations" component={Donations}/>
         <Route exact path="/donate" component={Donate}/>
       </Wrapper>
-      <Footer/>
     </div>
   </Router>;
 
