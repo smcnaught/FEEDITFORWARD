@@ -2,91 +2,48 @@ import React, {Component} from "react";
 import API from "../utils/API";
 import {FacetGroup} from "../components/Facets/FacetGroup";
 import {DonationResult} from "../components/Donation/DonationResult";
-import {List,ListItem} from "../components/List";
-
-
-var colorFacetsTree = [
-  {
-    "key": "Any Color",
-    "path": "/catalog/",
-    "isSelected": true
-  },
-  {
-    "key": "Puce",
-    "path": "/catalog/",
-    "isSelected": false
-  }
-];
-
-var categoryFacets = [
-  {
-    "key": "Grabs Bars",
-    "path": "/catalog/healthcare-equipment-bathing-grab-bars",
-    "doc_count": 45
-  },
-  {
-    "key": "Tub Accessories",
-    "path": "/catalog/healthcare-equipment-bathing-tub-accessories",
-    "doc_count": 12
-  },
-  {
-    "key": "Bathing Lifts",
-    "path": "/catalog/healthcare-equipment-bathing-bathing-lifts",
-    "doc_count": 8
-  }
-];
-
-var categoryFacetsTree = [
-  {
-    "key": "Any Category",
-    "path": "/catalog/",
-    "isSelected": false
-  },{
-    "key": "Healthcare Equipment",
-    "path": "/catalog/healthcare-equipment",
-    "isSelected": false
-  },
-  {
-    "key": "Bathing",
-    "path": "/catalog/healthcare-equipment-bathing",
-    "isSelected": true
-  }
-];
+import {List, ListItem} from "../components/List";
+import Navbar from "../components/Navbar/Navbar";
 
 class Donations extends Component {
 
   state = {
+    receiverId: -1,
     donations: [],
     reservedItems: [],
     tags: [],
     tagFacets: []
-    
   };
 
   componentDidMount() {
-    this.getAllDonations();
-  };
+    const userId = window.localStorage.getItem('user_id');
 
-  getAllReservedItems = () => {
-    const userId = 1;// TODO: fix this to get from user session
-    API.getDonations()
-      .then(res => {
-        this.setState({
-          reservedItems: res.data.filter(item => (item.status === 'reserved' && item.receiverId == userId))
-        });
+    if (userId) {
+      API.getUserById(userId).then(response => {
+        this.getAllDonations(response.data.id);
       })
-      .catch(error => { console.warn(error) });
+        .catch((err) => {
+          console.log(err);
+          window.localStorage.removeItem('user_id');
+        });
+    }
+    else {
+      window.location.href = "/";
+    }
+
   };
 
-  getAllDonations = () => {
+  getAllDonations = (receiverId) => {
     API.getDonations()
       .then(res => {
-        console.log("res", res);
-        this.setState(
+          console.log("res", res);
+          const donations = res.data.filter(donation => donation.status === "available");
+          const reservedItems = res.data.filter(donation => (donation.receiverId === receiverId && donation.status === "reserved"));
+          this.setState(
             {
-              donations: res.data
-              // tags: res.data.tags,
-              // tagFacets: newTagFacets
+              receiverId: receiverId,
+              donations: donations,
+              reservedItems: reservedItems
             });
         }
       )
@@ -94,7 +51,7 @@ class Donations extends Component {
   };
 
   handleInputChange = event => {
-    const { name, value } = event.target;
+    const {name, value} = event.target;
     this.setState({
       [name]: value
     });
@@ -105,157 +62,123 @@ class Donations extends Component {
     console.log("handleFacetCheck: " + id);
     const newTagFacets = this.state.tagFacets.map(tagFacet => {
       if (tagFacet.key === id) {
-        return Object.assign(tagFacet,{isSelected: !tagFacet.isSelected});
+        return Object.assign(tagFacet, {isSelected: !tagFacet.isSelected});
       }
       else {
         return tagFacet;
       }
     });
-    const activeTags = newTagFacets.reduce((a,e) => {
+    const activeTags = newTagFacets.reduce((a, e) => {
       if (e.isSelected) {
         a.push(e.key);
       }
       return a;
-    },[]);
+    }, []);
     if (activeTags.length > 0) {
 
-    const query={
+      const query = {
         "terms": {"tags": activeTags}
-    };
-    API.searchDonations(query)
-      .then(res => {
-          this.setState(
-            {
-              donations: res.data.results,
-              tags: res.data.tags,
-              tagFacets: newTagFacets
-            });
-        }
-      )
-      .catch(err => console.log(err));
+      };
+      API.searchDonations(query)
+        .then(res => {
+            this.setState(
+              {
+                donations: res.data.results,
+                tags: res.data.tags,
+                tagFacets: newTagFacets
+              });
+          }
+        )
+        .catch(err => console.log(err));
     }
     else {
       this.componentDidMount();
     }
   };
-  saveItem = (event) =>
-  {
+  saveItem = (event) => {
     let itemId = event.target.id;
-    let userId = 1;//TO DO make to current logged in user
-    let index = this.state.donations.findIndex(donation => donation.id == itemId);
-    let donationsCopy = this.state.donations;
-    let updatedReservedItems = this.state.reservedItems;
+    let receiverId = this.state.receiverId;
 
-    donationsCopy[index].receiverId = userId;
-    donationsCopy[index].status = 'reserved';
-
-    updatedReservedItems.push(donationsCopy[index]);
-    
-    API.reserveItem(userId, itemId)
+    API.reserveItem(receiverId, itemId)
       .then(item => {
         console.log("it saved my food", item);
-        this.getAllDonations();
-        // this.setState({
-        //   donations: donationsCopy,
-        //   reservedItems: updatedReservedItems
-        // })
+        this.getAllDonations(receiverId);
       })
       .catch(error => console.log("there was an error", error));
   };
 
   removeItem = event => {
     let itemId = event.target.id;
-    let donationsCopy = this.state.donations;
-    let index = this.state.reservedItems.findIndex(donation => donation.id == itemId);
-    let currentItem = this.state.reservedItems[index];
-    currentItem.status = 'available';
-    currentItem.receiverId = null;
-    donationsCopy.push(currentItem);
-
+    let receiverId = this.state.receiverId;
     API.unreserveItem(itemId)
       .then(item => {
         console.log('it worked to unreserve the item');
-        this.getAllDonations();
-        this.getAllReservedItems();
-        // this.setState({
-        //   reservedItems: this.state.reservedItems.filter(currentItem => currentItem.id != itemId),
-        //   donations: donationsCopy
-        // });
+        this.getAllDonations(receiverId);
       })
       .catch(error => console.warn('there was an error unreserving the item', error));
   }
 
 
-  render = () =>
-<div className= "donations">
-  <div className= "jumbotron jumbotron-fluid" id="receiveJumbotron">
-    <div className="container">
-      <h1>Welcome</h1>
-      <h2>Search for food that is available for pickup</h2>
-    </div>
-  </div>
-
-  <div className="container">   
-      <div className="row">
-
-        {/*<div className="col-md-2" id="donationColumn1">
-          <h5>Search Results</h5>
-          <FacetGroup title="Tags" facets={this.state.tagFacets} handleFacetCheck={this.handleFacetCheck} type="multi-select"/>
-            /*<FacetGroup title="Color" tree={colorFacetsTree}/>*/
-            /*<FacetGroup title="Category" facets={categoryFacets} tree={categoryFacetsTree}/>
-        </div>*/}
-        
-        <div className="col-md-5" id="donationColumn2">
-          <div className= "donationCard">
-            <div className= "card-body">
-            {/*<h5>Search for Available Food Items</h5>
-              <div className="input-group">
-                <input name="search" type="text" id="searchInput" className="form-control" value={this.setState.donations}/>
-                <button id="searchButton" className="btn btn-dark btn-md" type="submit">Search</button>
+  render = () => {
+    //console.log(this.state);
+    return <div className="donations">
+      <Navbar/>
+      <div className="jumbotron jumbotron-fluid" id="receiveJumbotron">
+        <div className="container">
+          <h1>Welcome</h1>
+          <h2>Search for food that is available for pickup</h2>
+        </div>
+      </div>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-5" id="donationColumn2">
+            <div className="donationCard">
+              <div className="card-body">
+                <h5>Donation Items Available</h5>
+                <hr/>
+                <div>
+                  <List>
+                    {
+                      this.state.donations.filter(donation => donation.status === "available")
+                        .map(donation =>
+                          <ListItem key={donation.id}>
+                            <DonationResult donation={donation}/>
+                            <button id={donation.id} className="btn btn-dark btn-md" type="submit"
+                                    onClick={this.saveItem}>Reserve
+                            </button>
+                          </ListItem>
+                        )
+                    }
+                  </List>
+                </div>
               </div>
-            <hr />*/}
-            <h5>Donation Items Available</h5>
-            <hr />
-            <div>
-              <List>
-                {
-                  this.state.donations.filter(donation => donation.status === "available")
-                  .map(donation =>
-                    <ListItem key={donation.id}>
-                      <DonationResult donation={donation}/>
-                       <button id={donation.id} className="btn btn-dark btn-md" type="submit" onClick={this.saveItem}>Reserve</button>
-                    </ListItem>
-                  )
-                } 
-              </List>
+            </div>
+          </div>
+
+          <div className="col-md-6" id="donationColumn3">
+            <div className="donationCard">
+              <h5>Items to Pick Up</h5>
+              <hr/>
+              <div className="card-body">
+                <div>
+                  <List>
+                    {
+                      this.state.reservedItems.map(item =>
+                        <ListItem key={item.id}>
+                          <DonationResult donation={item}/>
+                          <button id={item.id} className="btn btn-dark btn-md" onClick={this.removeItem}>Remove</button>
+                        </ListItem>
+                      )
+                    }
+                  </List>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>  
-               
-      <div className="col-md-6"id="donationColumn3">
-        <div className= "donationCard">
-          <h5>Items to Pick Up</h5>
-          <hr />
-            <div className= "card-body">
-              <div>
-                <List>
-                  {
-                    this.state.reservedItems.map(item =>
-                      <ListItem key={item.id}>
-                        <DonationResult donation={item} />
-                        <button id={item.id} className="btn btn-dark btn-md" onClick={this.removeItem}>Remove</button>
-                      </ListItem>
-                    )
-                  }
-                </List>            
-              </div>
-            </div>        
-        </div>   
-      </div>               
+      </div>
     </div>
-  </div>
-</div>
+  }
 }
 
 export default Donations;

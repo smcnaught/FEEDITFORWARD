@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import API from "../utils/API";
+import Navbar from "../components/Navbar/Navbar";
 
 class Donate extends Component {
 
@@ -8,15 +9,26 @@ class Donate extends Component {
     productQuantity: 0,
     productUnit: "",
     donorId: null,
-    receiverId: null,
     expiration: null,
     comments: "",
     status: "available",
     tags: ""
   };
-
   componentDidMount() {
-    // could grab list of labels
+    const userId = window.localStorage.getItem('user_id');
+
+    if (userId) {
+      API.getUserById(userId).then(response => {
+        this.setState({donorId: response.data.id});
+      })
+      .catch((err) => {
+        console.log(err);
+        window.localStorage.removeItem('user_id');
+      });
+    }
+    else {
+      window.location.href = "/";
+    }
   };
 
   handleInputChange = event => {
@@ -32,8 +44,7 @@ class Donate extends Component {
     const {id} = event.target;
     console.log("onClick: " + id);
     if (id === "donateSubmitButton") {
-      const tags=this.state.tags.split(",").map(tag => tag.trim());
-      const donation = Object.assign({},this.state,{tags: tags,donorId: 1});
+      const donation = Object.assign({},this.state);
       API.createDonation(donation)
         .then(response =>
           console.log("response:" + JSON.stringify(response,null,2)))
@@ -42,6 +53,7 @@ class Donate extends Component {
 
   render = () =>
   <div className="donate">
+    <Navbar/>
     <div className="container" id="donate">
       <div className="row">
         <div className="col-md-5" id="donateColumn1">
@@ -65,8 +77,6 @@ class Donate extends Component {
               </div>
                 <label htmlFor="expiration">Expiration</label>
                 <input name="expiration" type="datetime-local" id="expiration" onChange={this.handleInputChange} className="form-control"/>
-                {/*<label htmlFor="tags">Tags</label>
-                <input name="tags" type="text" id="expiration" onChange={this.handleInputChange} className="form-control"/>*/}
                 <button id="donateSubmitButton" className="btn btn-dark btn-md" type="submit" onClick={this.onClick}>Submit</button>
             </div>
           </div>

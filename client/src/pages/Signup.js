@@ -104,7 +104,7 @@ class Signup extends Component {
               <h3>Sign Up</h3>
               <hr/>
               <div className="card-body">
-                <p>
+                <div>
                   <label htmlFor="type">Select Role</label>
                   <br/>
                   <div className="styled-select blue semi-square">
@@ -113,7 +113,7 @@ class Signup extends Component {
                       <option value="receiver">Receiver</option>
                     </select>
                   </div>
-                </p>
+                </div>
                 <p>
                   <label htmlFor="organization">Organization Name</label>
                   <br/>
