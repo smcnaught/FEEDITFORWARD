@@ -57,7 +57,7 @@ module.exports = {
       .findById(req.params.id)
       .then(user => {
         if (user) {
-          res.json(user);
+          res.json(user.dataValues);
         }
         else {
           res.status(404).send(`User with id=${req.params.id} not found.`);
@@ -136,34 +136,44 @@ module.exports = {
   },
   reserveItem: function (req, res){
     console.log("--reserveItem", req.params.userId);
+    const userId = parseInt(req.params.userId);
+    const itemId = parseInt(req.params.itemId);
     let values = {
 
-      receiverId : req.params.userId,
+      receiverId : userId,
       status : "reserved"
-    }
-    db.Donation
-      .findById(req.params.itemId)
-      .then(item =>{ 
-        item.update(values)
-        .then(result => res.json(result))
-        .catch(error => res.json(error));
-      })
-
-      .catch(error => res.json(error))
-
+    };
+    
+    db.Donation.update(values,{where: {id: itemId}})
+      .then(result => res.json(result))
+      .catch(error => res.json(error));
   },
   unreserveItem: function (req, res) {
+    const itemId = parseInt(req.params.itemId);
+
     let values = {
       receiverId : null,
       status : "available"
-    }
-    db.Donation
-      .findById(req.params.itemId)
-      .then(item => {
-        item.update(values)
-          .then(result => res.json(result))
-          .catch(error => res.json(error));
-      });
+    };
 
+    db.Donation.update(values,{where: {id: itemId}})
+      .then(result => res.json(result))
+      .catch(error => res.json(error));
+  },
+  login: (req,res) => {
+    db.User.findOne({where: {email: req.params.email}}).then( resp => {
+      if (req && req.params && req.params.password === resp.dataValues.password) {
+        const result = Object.assign({}, resp.dataValues);
+        delete result.password;
+        res.json(result);
+      }
+      else {
+        res.status(401).send("Incorrect Username or Password");
+      }
+      })
+      .catch( err => {
+        console.log("err: " + err);
+        res.status(404).send("user not found!");
+    })
   }
 };

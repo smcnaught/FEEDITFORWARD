@@ -61,11 +61,19 @@ export default {
       '/api/users',
       user);
   },
+  getUserById(id) {
+    return axios.get(
+      '/api/users/' + id
+    );
+  },
   reserveItem(userId, itemId) {
     return axios.put(
       '/api/donations/user/'+ userId + '/item/' + itemId);
   },
   unreserveItem(itemId) {
     return axios.put('/api/donations/unreserve/' + itemId);
+  },
+  login(email,password) {
+    return axios.get('/api/login/' + email + '/' + password);
   }
 };
